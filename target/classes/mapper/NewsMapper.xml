@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leo.MySiteTest.dao.NewsDao">
+    <delete id="deleteAll">
+    	delete　from newsLists
+    </delete>
+    
+     <insert id="InsertOne">
+    	insert newsLists(title,content,createDate,publishDate,status) values('一生只养一个小动物','刘小姐举报邻居经常抛弃自家养的小猫小狗，那些小动物看起来十分可怜',GETDATE(),GETDATE(),'N');
+    </insert>
+    
+     <select id="itemCounts" resultType="int">
+    	select * from newsLists
+    </select>
+    
+      <insert id="InsertTwo">
+    	insert newsLists(title,content,createDate,publishDate,status) values
+    	('周杰伦方回应乱扔垃圾:想帮老先生做回收增加收入','近日有媒体拍到周杰伦晚上开车到台北东区，随行友人从车上搬运大量书籍，随后丢弃在清洁人员工作车上离开。因台湾收垃圾有特定时间，有网友质疑周董一行人此举没素质，引发热议。对此，周杰伦所在公司杰威尔回应称：“杰伦印象中白天有看过老先生在这边做资源回收，想帮助老先生做回收增加收入，以后会更加注意。”',GETDATE(),GETDATE(),'Y');
+    </insert>
+</mapper>

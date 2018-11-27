@@ -1,0 +1,6 @@
+com\leo\MySiteTest\dao\NewsDao.class
+com\leo\MySiteTest\tool\DBTools.class
+com\leo\MySiteTest\dto\BaseDto.class
+com\leo\MySiteTest\dto\NewsDto.class
+com\leo\MySiteTest\dao\TodoDao.class
+com\leo\MySiteTest\dto\Todo.class
