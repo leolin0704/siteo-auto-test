@@ -13,11 +13,11 @@ public class LoginTest extends BaseChromeTester {
 	public void LoginPage() {
 		LoginPage adminUser = new LoginPage(driver);
 		adminUser.loadPage();
-		WebElement inputAccount = adminUser.getUseNameInput();
+		WebElement inputAccount = adminUser.getUseNameInput().getEl();
 		inputAccount.sendKeys("admin");
-		WebElement inputPassword = adminUser.getPasswordInput();
+		WebElement inputPassword = adminUser.getPasswordInput().getEl();
 		inputPassword.sendKeys("123123");
-		WebElement login = adminUser.getLoginBtn();
+		WebElement login = adminUser.getLoginBtn().getEl();
 		login.click();
 	}
 }

@@ -31,18 +31,9 @@ public class RolePageTest extends BaseChromeTester {
 
 		AddRole(addRole, commonCom, waiter);
 
-		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getQueryInput().getBy()));
-		WebElement ResetBtn = addRole.getResetBtn().getEl();
-		ResetBtn.click();
-		WebElement QueryInput = addRole.getQueryInput().getEl();
-		System.out.println("Find QueryInput!");
-		QueryInput.sendKeys("Customer Service");
-		WebElement QueryBtn = addRole.getQueryBtn().getEl();
-		QueryBtn.click();
+		queryAddRole(addRole, commonCom, waiter);
 
-		WebElement RoleName = addRole.byATKey("Name").getEl();
-		Assert.assertTrue("".equals(RoleName.getText()));
-
+		deleteAddRole(addRole, commonCom, waiter);
 	}
 
 	private RoleMainPage AddRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
@@ -73,14 +64,14 @@ public class RolePageTest extends BaseChromeTester {
 	}
 
 	private void NavToRolePage(NavigationComponent navigation, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement title = navigation.getSystemManageNavEl();
+		WebElement title = navigation.getSystemManageNav().getEl();
 		title.click();
 		System.out.println("System Manage click!");
 
-		waiter.until(ExpectedConditions.presenceOfElementLocated(navigation.getRoleNavBy()));
-		waiter.until(ExpectedConditions.visibilityOfElementLocated(navigation.getRoleNavBy()));
+		waiter.until(ExpectedConditions.presenceOfElementLocated(navigation.getRoleNav().getBy()));
+		waiter.until(ExpectedConditions.visibilityOfElementLocated(navigation.getRoleNav().getBy()));
 
-		WebElement role = navigation.getRoleNavEl();
+		WebElement role = navigation.getRoleNav().getEl();
 		role.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 	}
@@ -95,8 +86,52 @@ public class RolePageTest extends BaseChromeTester {
 		WebElement login = adminUser.getLoginBtn().getEl();
 		login.click();
 
-		waiter.until(ExpectedConditions.presenceOfElementLocated(navigation.getSystemManageNavBy()));
-		waiter.until(ExpectedConditions.visibilityOfElementLocated(navigation.getSystemManageNavBy()));
+		waiter.until(ExpectedConditions.presenceOfElementLocated(navigation.getSystemManageNav().getBy()));
+		waiter.until(ExpectedConditions.visibilityOfElementLocated(navigation.getSystemManageNav().getBy()));
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getMessage().getBy()));
+	}
+
+	private void queryAddRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
+		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getQueryInput().getBy()));
+		WebElement ResetBtn = addRole.getResetBtn().getEl();
+		ResetBtn.click();
+		WebElement QueryInput = addRole.getQueryInput().getEl();
+		System.out.println("Find QueryInput!");
+		QueryInput.sendKeys("Customer Service");
+		WebElement QueryBtn = addRole.getQueryBtn().getEl();
+		QueryBtn.click();
+
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+
+		WebElement RoleName = addRole.byATKey("Name").getEl();
+		Assert.assertEquals("Customer Service", RoleName.getText());
+		System.out.println("query successfully!");
+
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+	}
+
+	private void deleteAddRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
+		WebElement DeleteBtn = addRole.getDeleteBtn().getEl();
+		System.out.println("find DeleteBtn successfully!");
+		DeleteBtn.click();
+		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getPromp().getBy()));
+		waiter.until(ExpectedConditions.visibilityOfElementLocated(addRole.getPromp().getBy()));
+		WebElement PrompOkBtn = addRole.getPrompOkBtn().getEl();
+		System.out.println("find PrompOkBtn successfully!");
+		PrompOkBtn.click();
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		WebElement ResetBtn = addRole.getResetBtn().getEl();
+		System.out.println("find ResetBtn successfully!");
+		ResetBtn.click();
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		WebElement QueryInput = addRole.getQueryInput().getEl();
+		System.out.println("find QueryInput successfully!");
+		QueryInput.sendKeys("Customer Service");
+		WebElement QueryBtn = addRole.getQueryBtn().getEl();
+		System.out.println("find QueryBtn successfully!");
+		QueryBtn.click();
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		WebElement NoDataSection = addRole.getNoDataSection().getEl();
+		Assert.assertTrue(NoDataSection.isDisplayed());
 	}
 }

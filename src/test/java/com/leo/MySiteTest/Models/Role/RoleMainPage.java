@@ -1,8 +1,6 @@
 package com.leo.MySiteTest.Models.Role;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
 import com.leo.MySiteTest.Models.BaseElement;
 import com.leo.MySiteTest.Models.BaseModel;
 
@@ -55,4 +53,19 @@ public class RoleMainPage extends BaseModel {
 		return byClassName("el-table_2_column_8  ");
 	}
 
+	public BaseElement getDeleteBtn() {
+		return byATKey("delete");
+	}
+
+	public BaseElement getPromp() {
+		return byClassName("el-message-box");
+	}
+
+	public BaseElement getPrompOkBtn() {
+		return byXpath("//div[@class='el-message-box__btns']/button/span[contains(text(),'OK')]");
+	}
+
+	public BaseElement getNoDataSection() {
+		return byXpath("//div[@class='el-table__empty-block']/span[contains(text(),'No Data')]");
+	}
 }

@@ -1,8 +1,6 @@
 package com.leo.MySiteTest.Models;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import com.leo.MySiteTest.Models.BaseModel;
 
 public class CommonComponents extends BaseModel {

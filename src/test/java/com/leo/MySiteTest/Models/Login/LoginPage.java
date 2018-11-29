@@ -2,8 +2,6 @@ package com.leo.MySiteTest.Models.Login;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
 import com.leo.MySiteTest.Common.ConfigHelper;
 import com.leo.MySiteTest.Models.BaseElement;
 import com.leo.MySiteTest.Models.BaseModel;
