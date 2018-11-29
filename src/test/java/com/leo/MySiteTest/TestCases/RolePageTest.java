@@ -31,9 +31,9 @@ public class RolePageTest extends BaseChromeTester {
 
 		AddRole(addRole, commonCom, waiter);
 
-		queryAddRole(addRole, commonCom, waiter);
+		queryAddedRole(addRole, commonCom, waiter);
 
-		deleteAddRole(addRole, commonCom, waiter);
+		deleteAddedRole(addRole, commonCom, waiter);
 	}
 
 	private RoleMainPage AddRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
@@ -91,7 +91,7 @@ public class RolePageTest extends BaseChromeTester {
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getMessage().getBy()));
 	}
 
-	private void queryAddRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
+	private void queryAddedRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
 		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getQueryInput().getBy()));
 		WebElement ResetBtn = addRole.getResetBtn().getEl();
 		ResetBtn.click();
@@ -110,7 +110,7 @@ public class RolePageTest extends BaseChromeTester {
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 	}
 
-	private void deleteAddRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
+	private void deleteAddedRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
 		WebElement DeleteBtn = addRole.getDeleteBtn().getEl();
 		System.out.println("find DeleteBtn successfully!");
 		DeleteBtn.click();
