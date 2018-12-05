@@ -22,4 +22,16 @@ public class CommonComponents extends BaseModel {
 		return byClassName("el-dialog");
 	}
 
+	public BaseElement getDialogSave() {
+		return byATKey("btnDialogSave");
+	}
+
+	public BaseElement getDialogCancel() {
+		return byATKey("btnDialogCancel");
+	}
+
+	public BaseElement getAlertWindow() {
+		return byCssSelector("[role=\"alert\"]");
+	}
+
 }

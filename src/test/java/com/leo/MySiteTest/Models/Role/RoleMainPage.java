@@ -15,8 +15,20 @@ public class RoleMainPage extends BaseModel {
 
 	}
 
+	public BaseElement getMultiDelete() {
+		return byATKey("btnMultiDelete");
+	}
+
 	public BaseElement getInputBox() {
 		return byId("txtRoleName");
+	}
+
+	public BaseElement getPermissionCheckBoxList() {
+		return byATKey("chkPermission");
+	}
+
+	public BaseElement getCheckBox() {
+		return byClassName("el-checkbox__inner");
 	}
 
 	public BaseElement getCustomerCheckbox() {
@@ -25,6 +37,10 @@ public class RoleMainPage extends BaseModel {
 
 	public BaseElement getBasic_InfoCheckbox() {
 		return byXpath("//span[contains(text(),'BASIC_INFO')]");
+	}
+
+	public BaseElement getCancelBtn() {
+		return byXpath("//button/span[contains(text(),'CANCEL')]/..");
 	}
 
 	public BaseElement getSaveBtn() {
@@ -49,12 +65,16 @@ public class RoleMainPage extends BaseModel {
 		return byId("tblRole");
 	}
 
-	public BaseElement getRoleName() {
-		return byClassName("el-table_2_column_8  ");
-	}
-
 	public BaseElement getDeleteBtn() {
 		return byATKey("delete");
+	}
+
+	public BaseElement getViewBtn() {
+		return byATKey("view");
+	}
+
+	public BaseElement getEditBtn() {
+		return byATKey("edit");
 	}
 
 	public BaseElement getPromp() {
@@ -68,4 +88,5 @@ public class RoleMainPage extends BaseModel {
 	public BaseElement getNoDataSection() {
 		return byXpath("//div[@class='el-table__empty-block']/span[contains(text(),'No Data')]");
 	}
+
 }

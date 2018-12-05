@@ -31,7 +31,12 @@ public class BaseModel {
 		return buildElement(By.cssSelector("[at-key=\"" + key + "\"]"));
 	}
 
+	public BaseElement GetTableRow(String atKey, String value) {
+		return buildElement(By.xpath("//*[@at-key='" + atKey + "' and text()='" + value + "']/ancestor::tr"));
+	}
+
 	public BaseElement buildElement(By by) {
 		return new BaseElement(by, driver);
 	}
+
 }
