@@ -2,6 +2,8 @@ package com.leo.MySiteTest.Models.Login;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
 import com.leo.MySiteTest.Common.ConfigHelper;
 import com.leo.MySiteTest.Models.BaseElement;
 import com.leo.MySiteTest.Models.BaseModel;
@@ -53,6 +55,17 @@ public class LoginPage extends BaseModel {
 
 	public BaseElement getImages() {
 		return byClassName("avatar");
+	}
+
+	public void UserLogin(String Name, String Password) {
+		LoginPage adminUser = new LoginPage(driver);
+		adminUser.loadPage();
+		WebElement inputAccount = adminUser.getUseNameInput().getEl();
+		inputAccount.sendKeys(Name);
+		WebElement inputPassword = adminUser.getPasswordInput().getEl();
+		inputPassword.sendKeys(Password);
+		WebElement login = adminUser.getLoginBtn().getEl();
+		login.click();
 	}
 
 }

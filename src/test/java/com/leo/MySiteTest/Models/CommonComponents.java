@@ -1,5 +1,6 @@
 package com.leo.MySiteTest.Models;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import com.leo.MySiteTest.Models.BaseModel;
 
@@ -32,6 +33,10 @@ public class CommonComponents extends BaseModel {
 
 	public BaseElement getAlertWindow() {
 		return byCssSelector("[role=\"alert\"]");
+	}
+
+	public BaseElement GetErrorPrompt(String value) {
+		return buildElement(By.xpath("//div[@class='el-form-item__error' and contains(.,'" + value + "')]"));
 	}
 
 }

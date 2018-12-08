@@ -39,6 +39,14 @@ public class RoleMainPage extends BaseModel {
 		return byXpath("//span[contains(text(),'BASIC_INFO')]");
 	}
 
+	public BaseElement getContentCheckbox() {
+		return byXpath("//span[contains(text(),'CONTENT')]");
+	}
+
+	public BaseElement getSystemCheckbox() {
+		return byXpath("//span[contains(text(),'SYSTEM')]");
+	}
+
 	public BaseElement getCancelBtn() {
 		return byXpath("//button/span[contains(text(),'CANCEL')]/..");
 	}
