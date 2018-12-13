@@ -322,7 +322,7 @@ public class RolePageTest extends BaseChromeTester {
 		WebElement DisabledCheckbox = addRole.getPermissionCheckBoxList().getEl();
 		Assert.assertTrue(DisabledCheckbox.getAttribute("class").contains("is-disabled"));
 		System.out.println("find DisabledCheckbox!");
-		WebElement CancelBtn = commonCom.getDialogCancel().getEl(); // addRole.getCancelBtn().getEl();
+		WebElement CancelBtn = commonCom.getDialogCancel().getEl();
 		CancelBtn.click();
 		System.out.println("click CancelBtn!");
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
