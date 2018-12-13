@@ -37,5 +37,7 @@
     <mappers>
         <mapper resource="mapper/TodoMapper.xml"/>
         <mapper resource="mapper/NewsMapper.xml"/>
+        <mapper resource="mapper/RoleMapper.xml"/>
+        <mapper resource="mapper/RolePermissionMapper.xml"/>
     </mappers>
 </configuration>

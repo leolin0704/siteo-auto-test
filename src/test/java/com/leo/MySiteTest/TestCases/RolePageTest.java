@@ -1,5 +1,6 @@
 package com.leo.MySiteTest.TestCases;
 
+import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -14,11 +15,36 @@ import com.leo.MySiteTest.Models.NavigationComponent;
 import com.leo.MySiteTest.Models.Login.LoginPage;
 import com.leo.MySiteTest.Models.Role.RoleMainPage;
 import com.leo.MySiteTest.TestCases.BaseChromeTester;
+import com.leo.MySiteTest.tool.DBTools;
 
 public class RolePageTest extends BaseChromeTester {
 
 	@Test
-	public void AddRole() {
+	public void AddRole() throws InterruptedException {
+
+//		synchronized (driver) {
+//
+//			SqlSession session = DBTools.getSession();
+//			SiteoDao mapper = session.getMapper(SiteoDao.class);
+//			try {
+//				mapper.deleteCustomerService();
+//				session.commit();
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				session.rollback();
+//				Assert.fail();
+//			}
+//
+//			try {
+//				mapper.EditDataManager();
+//				session.commit();
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				session.rollback();
+//				Assert.fail();
+//			}
+//		}
+
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
 		RoleMainPage addRole = new RoleMainPage(driver);
@@ -40,10 +66,6 @@ public class RolePageTest extends BaseChromeTester {
 
 		addDuplicateRole(addRole, commonCom, waiter);
 
-		deleteAddedRole(addRole, commonCom, waiter);
-
-		queryDeletedRole(addRole, commonCom, waiter);
-
 		queryALLRole(addRole, commonCom, waiter);
 
 		deleteRoleWithUser(addRole, commonCom, waiter);
@@ -55,6 +77,10 @@ public class RolePageTest extends BaseChromeTester {
 		editRoleFailed(addRole, commonCom, waiter);
 
 		editRoleSuccessed(addRole, commonCom, waiter, navigation);
+
+		deleteAddedRole(addRole, commonCom, waiter);
+
+		queryDeletedRole(addRole, commonCom, waiter);
 	}
 
 	private void adminLogin(NavigationComponent navigation, CommonComponents commonCom, WebDriverWait waiter) {
@@ -129,9 +155,8 @@ public class RolePageTest extends BaseChromeTester {
 		WebElement inputBox = addRole.getInputBox().getEl();
 		System.out.println("Find inputBox!");
 		inputBox.sendKeys("1");
-		WebElement CustomerCheckbox = addRole.getCustomerCheckbox().getEl();
-		System.out.println("Find CustomerCheckbox!");
-		CustomerCheckbox.click();
+		WebElement dialogeHead = driver.findElement(By.className("el-dialog__header"));
+		dialogeHead.click();
 		WebElement StringLimitPrompt = commonCom.GetErrorPrompt("Name length should between 2 to 50.").getEl();
 		System.out.println("Find permissionErrorPrompt!");
 		Assert.assertTrue(StringLimitPrompt.isDisplayed());
@@ -140,13 +165,45 @@ public class RolePageTest extends BaseChromeTester {
 		for (int i = 1; i <= 50; i++) {
 			inputBox.sendKeys("1");
 		}
-		WebElement Basic_InfoCheckbox = addRole.getBasic_InfoCheckbox().getEl();
-		System.out.println("Find Basic_InfoCheckbox!");
-		Basic_InfoCheckbox.click();
+		dialogeHead = driver.findElement(By.className("el-dialog__header"));
+		dialogeHead.click();
 		StringLimitPrompt = commonCom.GetErrorPrompt("Name length should between 2 to 50.").getEl();
 		System.out.println("Find permissionErrorPrompt!");
 		Assert.assertTrue(StringLimitPrompt.isDisplayed());
-
+		inputBox = addRole.getInputBox().getEl();
+		System.out.println("Find inputBox!");
+		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+		inputBox.sendKeys("/()*&^%$#@!+<>?|{}");
+		dialogeHead = driver.findElement(By.className("el-dialog__header"));
+		dialogeHead.click();
+		WebElement StringValidationPrompt = commonCom
+				.GetErrorPrompt("Name may only contain alphanumeric characters, underline or single hyphens.").getEl();
+		System.out.println("Find StringValidationPrompt!");
+		Assert.assertTrue(StringValidationPrompt.isDisplayed());
+		inputBox = addRole.getInputBox().getEl();
+		System.out.println("Find inputBox!");
+		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+		inputBox.sendKeys("汉字");
+		dialogeHead = driver.findElement(By.className("el-dialog__header"));
+		dialogeHead.click();
+		StringValidationPrompt = commonCom
+				.GetErrorPrompt("Name may only contain alphanumeric characters, underline or single hyphens.").getEl();
+		System.out.println("Find StringValidationPrompt!");
+		Assert.assertTrue(StringValidationPrompt.isDisplayed());
+		inputBox = addRole.getInputBox().getEl();
+		System.out.println("Find inputBox!");
+		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+		inputBox.sendKeys("-_");
+		dialogeHead = driver.findElement(By.className("el-dialog__header"));
+		dialogeHead.click();
+		try {
+			StringValidationPrompt = commonCom
+					.GetErrorPrompt("Name may only contain alphanumeric characters, underline or single hyphens.")
+					.getEl();
+			System.out.println("Find StringValidationPrompt!");
+		} catch (Exception e) {
+			System.out.println("'" + StringValidationPrompt + "' doesn't exist!");
+		}
 	}
 
 	private RoleMainPage addRoleSucceed(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
@@ -154,6 +211,12 @@ public class RolePageTest extends BaseChromeTester {
 		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getInputBox().getBy()));
 		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
 		inputBox.sendKeys("Customer Service");
+		WebElement CustomerCheckbox = addRole.getCustomerCheckbox().getEl();
+		System.out.println("Find CustomerCheckbox!");
+		CustomerCheckbox.click();
+		WebElement Basic_InfoCheckbox = addRole.getBasic_InfoCheckbox().getEl();
+		System.out.println("Find Basic_InfoCheckbox!");
+		Basic_InfoCheckbox.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement SaveBtn = addRole.getSaveBtn().getEl();
 		SaveBtn.click();
@@ -182,19 +245,18 @@ public class RolePageTest extends BaseChromeTester {
 	}
 
 	private void dealWithAlert(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement SaveBtn = commonCom.getDialogSave().getEl();
+		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getSaveBtn().getBy()));
+		waiter.until(ExpectedConditions.visibilityOfElementLocated(addRole.getSaveBtn().getBy()));
+		WebElement saveBtn = commonCom.getDialogSave().getEl();
 		System.out.println("find SaveBtn!");
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-		SaveBtn.click();
+		saveBtn.click();
 		waiter.until(ExpectedConditions.presenceOfElementLocated(commonCom.getAlertWindow().getBy()));
 		waiter.until(ExpectedConditions.visibilityOfElementLocated(commonCom.getAlertWindow().getBy()));
 		WebElement AlertWindow = commonCom.getAlertWindow().getEl();
 		System.out.println("find AlertWindow!");
 		Assert.assertTrue(AlertWindow.isDisplayed());
 		WebElement CancelBtn = commonCom.getDialogCancel().getEl();
-		System.out.println("find CancelBtn!");
-		waiter.until(ExpectedConditions.presenceOfElementLocated(commonCom.getDialogCancel().getBy()));
-		waiter.until(ExpectedConditions.visibilityOfElementLocated(commonCom.getDialogCancel().getBy()));
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		CancelBtn.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
@@ -203,34 +265,6 @@ public class RolePageTest extends BaseChromeTester {
 	private void addDuplicateRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
 		addRole(addRole, commonCom, waiter);
 		dealWithAlert(addRole, commonCom, waiter);
-	}
-
-	private void deleteAddedRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement DeleteBtn = addRole.getDeleteBtn().getEl();
-		System.out.println("find DeleteBtn successfully!");
-		DeleteBtn.click();
-		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getPromp().getBy()));
-		waiter.until(ExpectedConditions.visibilityOfElementLocated(addRole.getPromp().getBy()));
-		WebElement PrompOkBtn = addRole.getPrompOkBtn().getEl();
-		System.out.println("find PrompOkBtn successfully!");
-		PrompOkBtn.click();
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-	}
-
-	private void queryDeletedRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement ResetBtn = addRole.getResetBtn().getEl();
-		System.out.println("find ResetBtn successfully!");
-		ResetBtn.click();
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-		WebElement QueryInput = addRole.getQueryInput().getEl();
-		System.out.println("find QueryInput successfully!");
-		QueryInput.sendKeys("Customer Service");
-		WebElement QueryBtn = addRole.getQueryBtn().getEl();
-		System.out.println("find QueryBtn successfully!");
-		QueryBtn.click();
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-		WebElement NoDataSection = addRole.getNoDataSection().getEl();
-		Assert.assertTrue(NoDataSection.isDisplayed());
 	}
 
 	private void queryALLRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
@@ -244,12 +278,13 @@ public class RolePageTest extends BaseChromeTester {
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement superAdminRole = addRole.GetTableRow("Name", "Super Admin").getEl();
 		Assert.assertTrue(superAdminRole.isDisplayed());
-		WebElement dataManagerRole = addRole.GetTableRow("Name", "Data Manager").getEl();
+		WebElement dataManagerRole = addRole.GetTableRow("Name", "Customer Service").getEl();
 		Assert.assertTrue(dataManagerRole.isDisplayed());
 	}
 
 	private void deleteRoleWithUser(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement getCheckBox = addRole.getCheckBox().getEl();
+		WebElement superAdminRole = addRole.GetTableRow("Name", "Super Admin").getEl();
+		WebElement getCheckBox = superAdminRole.findElement(By.className("el-checkbox__inner"));
 		getCheckBox.click();
 		WebElement MultiDelete = addRole.getMultiDelete().getEl();
 		MultiDelete.click();
@@ -266,7 +301,8 @@ public class RolePageTest extends BaseChromeTester {
 	}
 
 	private void viewSuperAdmin(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement viewBtn = addRole.getViewBtn().getEl();
+		WebElement superAdminRole = addRole.GetTableRow("Name", "Super Admin").getEl();
+		WebElement viewBtn = superAdminRole.findElement(By.cssSelector("[at-key=\"view\"]"));
 		viewBtn.click();
 		waiter.until(ExpectedConditions.presenceOfElementLocated(commonCom.getDialog().getBy()));
 		waiter.until(ExpectedConditions.visibilityOfElementLocated(commonCom.getDialog().getBy()));
@@ -305,19 +341,16 @@ public class RolePageTest extends BaseChromeTester {
 	}
 
 	public void editRoleFailed(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement dataManagerRole = addRole.GetTableRow("Name", "Data Manager").getEl();
+		WebElement dataManagerRole = addRole.GetTableRow("Name", "Customer Service").getEl();
 		WebElement editBtn = dataManagerRole.findElement(By.cssSelector("[at-key=\"edit\"]"));
 		editBtn.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement inputBox = addRole.getInputBox().getEl();
 		System.out.println("Find inputBox!");
 		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
-		WebElement ContentCheckbox = addRole.getContentCheckbox().getEl();
-		System.out.println("Find ContentCheckbox!");
-		ContentCheckbox.click();
-		WebElement SystemCheckbox = addRole.getSystemCheckbox().getEl();
-		System.out.println("Find SystemCheckbox!");
-		SystemCheckbox.click();
+		WebElement CustomerCheckbox = addRole.getCustomerCheckbox().getEl();
+		System.out.println("Find CustomerCheckbo!");
+		CustomerCheckbox.click();
 		WebElement Basic_InfoCheckbox = addRole.getBasic_InfoCheckbox().getEl();
 		System.out.println("Find Basic_InfoCheckbox!");
 		Basic_InfoCheckbox.click();
@@ -376,4 +409,31 @@ public class RolePageTest extends BaseChromeTester {
 		Assert.assertTrue(Customertitle.isDisplayed());
 	}
 
+	private void deleteAddedRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
+		WebElement DeleteBtn = addRole.getDeleteBtn().getEl();
+		System.out.println("find DeleteBtn successfully!");
+		DeleteBtn.click();
+		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getPromp().getBy()));
+		waiter.until(ExpectedConditions.visibilityOfElementLocated(addRole.getPromp().getBy()));
+		WebElement PrompOkBtn = addRole.getPrompOkBtn().getEl();
+		System.out.println("find PrompOkBtn successfully!");
+		PrompOkBtn.click();
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+	}
+
+	private void queryDeletedRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
+		WebElement ResetBtn = addRole.getResetBtn().getEl();
+		System.out.println("find ResetBtn successfully!");
+		ResetBtn.click();
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		WebElement QueryInput = addRole.getQueryInput().getEl();
+		System.out.println("find QueryInput successfully!");
+		QueryInput.sendKeys("Customer Service");
+		WebElement QueryBtn = addRole.getQueryBtn().getEl();
+		System.out.println("find QueryBtn successfully!");
+		QueryBtn.click();
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		WebElement NoDataSection = addRole.getNoDataSection().getEl();
+		Assert.assertTrue(NoDataSection.isDisplayed());
+	}
 }
