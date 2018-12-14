@@ -76,7 +76,7 @@ public class RolePageTest extends BaseChromeTester {
 
 		editRoleFailed(addRole, commonCom, waiter);
 
-		editRoleSuccessed(addRole, commonCom, waiter, navigation);
+//		editRoleSuccessed(addRole, commonCom, waiter, navigation);
 
 		deleteAddedRole(addRole, commonCom, waiter);
 
@@ -341,8 +341,8 @@ public class RolePageTest extends BaseChromeTester {
 	}
 
 	public void editRoleFailed(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement dataManagerRole = addRole.GetTableRow("Name", "Customer Service").getEl();
-		WebElement editBtn = dataManagerRole.findElement(By.cssSelector("[at-key=\"edit\"]"));
+		WebElement customerServiceRole = addRole.GetTableRow("Name", "Customer Service").getEl();
+		WebElement editBtn = customerServiceRole.findElement(By.cssSelector("[at-key=\"edit\"]"));
 		editBtn.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement inputBox = addRole.getInputBox().getEl();
@@ -366,9 +366,8 @@ public class RolePageTest extends BaseChromeTester {
 		inputBox = addRole.getInputBox().getEl();
 		System.out.println("Find inputBox!");
 		inputBox.sendKeys("1");
-		SystemCheckbox = addRole.getSystemCheckbox().getEl();
-		System.out.println("Find SystemCheckbox!");
-		SystemCheckbox.click();
+		WebElement windowHead = driver.findElement(By.className("el-dialog__header"));
+		windowHead.click();
 		WebElement StringLimitPrompt = commonCom.GetErrorPrompt("Name length should between 2 to 50.").getEl();
 		System.out.println("Find permissionErrorPrompt!");
 		Assert.assertTrue(StringLimitPrompt.isDisplayed());
@@ -377,42 +376,89 @@ public class RolePageTest extends BaseChromeTester {
 		for (int i = 1; i <= 50; i++) {
 			inputBox.sendKeys("1");
 		}
-		WebElement CustomerCheckbox = addRole.getCustomerCheckbox().getEl();
-		System.out.println("Find CustomerCheckbox!");
-		CustomerCheckbox.click();
+		windowHead = driver.findElement(By.className("el-dialog__header"));
+		windowHead.click();
 		StringLimitPrompt = commonCom.GetErrorPrompt("Name length should between 2 to 50.").getEl();
 		System.out.println("Find permissionErrorPrompt!");
 		Assert.assertTrue(StringLimitPrompt.isDisplayed());
+		inputBox = addRole.getInputBox().getEl();
+		System.out.println("Find inputBox!");
+		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+		inputBox.sendKeys("汉字");
+		windowHead = driver.findElement(By.className("el-dialog__header"));
+		windowHead.click();
+		StringLimitPrompt = commonCom
+				.GetErrorPrompt("Name may only contain alphanumeric characters, underline or single hyphens").getEl();
+		System.out.println("Find permissionErrorPrompt!");
+		Assert.assertTrue(StringLimitPrompt.isDisplayed());
+		inputBox = addRole.getInputBox().getEl();
+		System.out.println("Find inputBox!");
+		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+		inputBox.sendKeys("~！@#￥%……&*（）+=？<>{}:");
+		windowHead = driver.findElement(By.className("el-dialog__header"));
+		windowHead.click();
+		StringLimitPrompt = commonCom
+				.GetErrorPrompt("Name may only contain alphanumeric characters, underline or single hyphens").getEl();
+		System.out.println("Find permissionErrorPrompt!");
+		Assert.assertTrue(StringLimitPrompt.isDisplayed());
+		inputBox = addRole.getInputBox().getEl();
+		System.out.println("Find inputBox!");
+		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+		inputBox.sendKeys("~！@#￥%……&*（）+=？<>{}:");
+		windowHead = driver.findElement(By.className("el-dialog__header"));
+		windowHead.click();
+		StringLimitPrompt = commonCom
+				.GetErrorPrompt("Name may only contain alphanumeric characters, underline or single hyphens").getEl();
+		System.out.println("Find permissionErrorPrompt!");
+		Assert.assertTrue(StringLimitPrompt.isDisplayed());
+		inputBox = addRole.getInputBox().getEl();
+		System.out.println("Find inputBox!");
+		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+		inputBox.sendKeys("-_");
+		windowHead = driver.findElement(By.className("el-dialog__header"));
+		windowHead.click();
+
+		try {
+			StringLimitPrompt = commonCom
+					.GetErrorPrompt("Name may only contain alphanumeric characters, underline or single hyphens")
+					.getEl();
+			System.out.println("Find StringLimitPrompt!");
+		} catch (Exception e) {
+			System.out.println("No Such An Element!");
+		}
+		WebElement CancelBtn = commonCom.getDialogCancel().getEl();
+		CancelBtn.click();
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 	}
 
-	public void editRoleSuccessed(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter,
-			NavigationComponent navigation) {
-		WebElement inputBox = addRole.getInputBox().getEl();
-		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getInputBox().getBy()));
-		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
-		inputBox.sendKeys("Customer Service");
-		WebElement saveBtn = addRole.getSaveBtn().getEl();
-		saveBtn.click();
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-		String baseUr2 = ConfigHelper.getBaseURL("/#/user");
-		driver.get(baseUr2 + "/");
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-		WebElement WangliliRow = addRole.GetTableRow("Account", "Wanglili").getEl();
-		WebElement RoleName = WangliliRow.findElement(By.cssSelector("[at-key=\"RoleName\"]"));
-		Assert.assertEquals("Customer Service", RoleName.getText());
-		LoginPage adminUser = new LoginPage(driver);
-		adminUser.UserLogin("Wanglili", "1991325");
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-		WebElement Systemtitle = navigation.getSystemManageNav().getEl();
-		Assert.assertTrue(Systemtitle.isDisplayed());
-		WebElement Customertitle = navigation.getCustomerNav().getEl();
-		Assert.assertTrue(Customertitle.isDisplayed());
-	}
+//	public void editRoleSuccessed(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter,
+//			NavigationComponent navigation) {
+//		WebElement inputBox = addRole.getInputBox().getEl();
+//		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getInputBox().getBy()));
+//		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+//		inputBox.sendKeys("Customer Service");
+//		WebElement saveBtn = addRole.getSaveBtn().getEl();
+//		saveBtn.click();
+//		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+//		String baseUr2 = ConfigHelper.getBaseURL("/#/user");
+//		driver.get(baseUr2 + "/");
+//		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+//		WebElement WangliliRow = addRole.GetTableRow("Account", "Wanglili").getEl();
+//		WebElement RoleName = WangliliRow.findElement(By.cssSelector("[at-key=\"RoleName\"]"));
+//		Assert.assertEquals("Customer Service", RoleName.getText());
+//		LoginPage adminUser = new LoginPage(driver);
+//		adminUser.UserLogin("Wanglili", "1991325");
+//		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+//		WebElement Systemtitle = navigation.getSystemManageNav().getEl();
+//		Assert.assertTrue(Systemtitle.isDisplayed());
+//		WebElement Customertitle = navigation.getCustomerNav().getEl();
+//		Assert.assertTrue(Customertitle.isDisplayed());
+//	}
 
 	private void deleteAddedRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement DeleteBtn = addRole.getDeleteBtn().getEl();
-		System.out.println("find DeleteBtn successfully!");
-		DeleteBtn.click();
+		WebElement customerServiceRole = addRole.GetTableRow("Name", "Customer Service").getEl();
+		WebElement deleteBtn = customerServiceRole.findElement(By.cssSelector("[at-key=\"delete\"]"));
+		deleteBtn.click();
 		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getPromp().getBy()));
 		waiter.until(ExpectedConditions.visibilityOfElementLocated(addRole.getPromp().getBy()));
 		WebElement PrompOkBtn = addRole.getPrompOkBtn().getEl();
@@ -422,10 +468,6 @@ public class RolePageTest extends BaseChromeTester {
 	}
 
 	private void queryDeletedRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement ResetBtn = addRole.getResetBtn().getEl();
-		System.out.println("find ResetBtn successfully!");
-		ResetBtn.click();
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement QueryInput = addRole.getQueryInput().getEl();
 		System.out.println("find QueryInput successfully!");
 		QueryInput.sendKeys("Customer Service");
