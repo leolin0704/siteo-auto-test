@@ -1,6 +1,16 @@
 com\leo\MySiteTest\dao\NewsDao.class
 com\leo\MySiteTest\tool\DBTools.class
+com\leo\MySiteTest\dao\RolePermissionDao.class
+com\leo\MySiteTest\dto\BaseSiteoDto.class
+com\leo\MySiteTest\service\BaseService.class
+com\leo\MySiteTest\dto\Todo.class
+com\leo\MySiteTest\ViewModel\RermissionList.class
+com\leo\MySiteTest\service\RolePermissionServiceImpl.class
+com\leo\MySiteTest\dao\RoleDao.class
 com\leo\MySiteTest\dto\BaseDto.class
 com\leo\MySiteTest\dto\NewsDto.class
+com\leo\MySiteTest\service\RoleServiceImpl.class
+com\leo\MySiteTest\dto\RolePermissionDto.class
 com\leo\MySiteTest\dao\TodoDao.class
-com\leo\MySiteTest\dto\Todo.class
+com\leo\MySiteTest\dto\RoleDto.class
+com\leo\MySiteTest\dto\PermissionDto.class

@@ -1,6 +1,5 @@
 package com.leo.MySiteTest.TestCases;
 
-import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -8,42 +7,34 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import com.leo.MySiteTest.Common.ConfigHelper;
 import com.leo.MySiteTest.Models.CommonComponents;
 import com.leo.MySiteTest.Models.NavigationComponent;
 import com.leo.MySiteTest.Models.Login.LoginPage;
 import com.leo.MySiteTest.Models.Role.RoleMainPage;
 import com.leo.MySiteTest.TestCases.BaseChromeTester;
-import com.leo.MySiteTest.tool.DBTools;
+import com.leo.MySiteTest.service.RoleService;
+import com.leo.MySiteTest.service.UserService;
 
 public class RolePageTest extends BaseChromeTester {
 
-	@Test
-	public void AddRole() throws InterruptedException {
+	RoleService roleService = new RoleService();
 
-//		synchronized (driver) {
-//
-//			SqlSession session = DBTools.getSession();
-//			SiteoDao mapper = session.getMapper(SiteoDao.class);
-//			try {
-//				mapper.deleteCustomerService();
-//				session.commit();
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				session.rollback();
-//				Assert.fail();
-//			}
-//
-//			try {
-//				mapper.EditDataManager();
-//				session.commit();
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				session.rollback();
-//				Assert.fail();
-//			}
-//		}
+	UserService userService = new UserService();
+
+	@Test
+	public void navToRolePage() {
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		NavigationComponent navigation = new NavigationComponent(driver);
+		CommonComponents commonCom = new CommonComponents(driver);
+
+		adminLogin(navigation, commonCom, waiter);
+
+		navToRolePage(navigation, commonCom, waiter);
+	}
+
+	@Test
+	public void cancelAddRole() throws InterruptedException {
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
@@ -52,23 +43,106 @@ public class RolePageTest extends BaseChromeTester {
 
 		adminLogin(navigation, commonCom, waiter);
 
-		navToRolePage(navigation, commonCom, waiter);
+		String baseUr2 = ConfigHelper.getBaseURL("/#/role");
+		driver.get(baseUr2 + "/");
 
-		addRole(addRole, commonCom, waiter);
-
+		addRole(addRole, commonCom, waiter, "Customer Service");
 		cancelAddRole(addRole, commonCom, waiter);
+	}
+
+	@Test
+	public void addRoleFailed() {
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		NavigationComponent navigation = new NavigationComponent(driver);
+		RoleMainPage addRole = new RoleMainPage(driver);
+		CommonComponents commonCom = new CommonComponents(driver);
+
+		adminLogin(navigation, commonCom, waiter);
+
+		String baseUr2 = ConfigHelper.getBaseURL("/#/role");
+		driver.get(baseUr2 + "/");
 
 		addRoleFailed(addRole, commonCom, waiter);
 
+	}
+
+	@Test
+	public void addRoleSucceed() {
+
+		roleService.deleteByName("Customer Service");
+
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		NavigationComponent navigation = new NavigationComponent(driver);
+		RoleMainPage addRole = new RoleMainPage(driver);
+		CommonComponents commonCom = new CommonComponents(driver);
+
+		adminLogin(navigation, commonCom, waiter);
+
+		String baseUr2 = ConfigHelper.getBaseURL("/#/role");
+		driver.get(baseUr2 + "/");
+
+		addRole(addRole, commonCom, waiter, "Customer Service");
 		addRoleSucceed(addRole, commonCom, waiter);
+	}
 
-		queryAddedRole(addRole, commonCom, waiter);
+	@Test
+	public void queryExistRole() {
 
+		roleService.insertByName("Boss");
+
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		NavigationComponent navigation = new NavigationComponent(driver);
+		RoleMainPage addRole = new RoleMainPage(driver);
+		CommonComponents commonCom = new CommonComponents(driver);
+
+		adminLogin(navigation, commonCom, waiter);
+		String baseUr2 = ConfigHelper.getBaseURL("/#/role");
+		driver.get(baseUr2 + "/");
+		queryExistRole(addRole, commonCom, waiter, "Boss");
+	}
+
+	@Test
+
+	public void addDuplicate() {
+		roleService.insertByName("Market Analysis");
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		NavigationComponent navigation = new NavigationComponent(driver);
+		RoleMainPage addRole = new RoleMainPage(driver);
+		CommonComponents commonCom = new CommonComponents(driver);
+
+		adminLogin(navigation, commonCom, waiter);
+		String baseUr2 = ConfigHelper.getBaseURL("/#/role");
+		driver.get(baseUr2 + "/");
 		addDuplicateRole(addRole, commonCom, waiter);
+	}
 
+	@Test
+	public void deleteRoleWithUser() {
+		roleService.insertByName("Market Manager");
+		userService.insertByName("Andy", "13141528");
+		userService.roleAddUser("Andy", "Market Manager");
+
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		NavigationComponent navigation = new NavigationComponent(driver);
+		RoleMainPage addRole = new RoleMainPage(driver);
+		CommonComponents commonCom = new CommonComponents(driver);
+
+		adminLogin(navigation, commonCom, waiter);
+		String baseUr2 = ConfigHelper.getBaseURL("/#/role");
+		driver.get(baseUr2 + "/");
+		deleteRoleWithUser(addRole, commonCom, waiter, "Market Manager");
+	}
+
+	@Test
+	public void addDuplicateRoles() {
+//
+//		addDuplicateRole(addRole, commonCom, waiter);
+//	}
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		NavigationComponent navigation = new NavigationComponent(driver);
+		CommonComponents commonCom = new CommonComponents(driver);
+		RoleMainPage addRole = new RoleMainPage(driver);
 		queryALLRole(addRole, commonCom, waiter);
-
-		deleteRoleWithUser(addRole, commonCom, waiter);
 
 		viewSuperAdmin(addRole, commonCom, waiter);
 
@@ -105,7 +179,8 @@ public class RolePageTest extends BaseChromeTester {
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 	}
 
-	private void addRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
+	private void addRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter, String name) {
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement addBtn = addRole.getAddNav().getEl();
 		System.out.println("Find AddButton!");
 		addBtn.click();
@@ -115,7 +190,7 @@ public class RolePageTest extends BaseChromeTester {
 		WebElement inputBox = addRole.getInputBox().getEl();
 		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getInputBox().getBy()));
 		System.out.println("Find InputBox!");
-		inputBox.sendKeys("Customer Service");
+		inputBox.sendKeys(name);
 
 		WebElement CustomerCheckbox = addRole.getCustomerCheckbox().getEl();
 		System.out.println("Find CustomerCheckbox!");
@@ -137,6 +212,7 @@ public class RolePageTest extends BaseChromeTester {
 	}
 
 	private void addRoleFailed(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement addBtn = addRole.getAddNav().getEl();
 		System.out.println("Find AddButton!");
 		addBtn.click();
@@ -207,16 +283,6 @@ public class RolePageTest extends BaseChromeTester {
 	}
 
 	private RoleMainPage addRoleSucceed(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement inputBox = addRole.getInputBox().getEl();
-		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getInputBox().getBy()));
-		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
-		inputBox.sendKeys("Customer Service");
-		WebElement CustomerCheckbox = addRole.getCustomerCheckbox().getEl();
-		System.out.println("Find CustomerCheckbox!");
-		CustomerCheckbox.click();
-		WebElement Basic_InfoCheckbox = addRole.getBasic_InfoCheckbox().getEl();
-		System.out.println("Find Basic_InfoCheckbox!");
-		Basic_InfoCheckbox.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement SaveBtn = addRole.getSaveBtn().getEl();
 		SaveBtn.click();
@@ -225,20 +291,18 @@ public class RolePageTest extends BaseChromeTester {
 		return addRole;
 	}
 
-	private void queryAddedRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getQueryInput().getBy()));
-		WebElement ResetBtn = addRole.getResetBtn().getEl();
-		ResetBtn.click();
+	private void queryExistRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter, String name) {
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement QueryInput = addRole.getQueryInput().getEl();
 		System.out.println("Find QueryInput!");
-		QueryInput.sendKeys("Customer Service");
+		QueryInput.sendKeys(name);
 		WebElement QueryBtn = addRole.getQueryBtn().getEl();
 		QueryBtn.click();
 
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 
 		WebElement RoleName = addRole.byATKey("Name").getEl();
-		Assert.assertEquals("Customer Service", RoleName.getText());
+		Assert.assertEquals(name, RoleName.getText());
 		System.out.println("query successfully!");
 
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
@@ -263,7 +327,7 @@ public class RolePageTest extends BaseChromeTester {
 	}
 
 	private void addDuplicateRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		addRole(addRole, commonCom, waiter);
+		addRole(addRole, commonCom, waiter, "Market Analysis");
 		dealWithAlert(addRole, commonCom, waiter);
 	}
 
@@ -282,8 +346,10 @@ public class RolePageTest extends BaseChromeTester {
 		Assert.assertTrue(dataManagerRole.isDisplayed());
 	}
 
-	private void deleteRoleWithUser(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement superAdminRole = addRole.GetTableRow("Name", "Super Admin").getEl();
+	private void deleteRoleWithUser(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter,
+			String roleName) {
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		WebElement superAdminRole = addRole.GetTableRow("Name", roleName).getEl();
 		WebElement getCheckBox = superAdminRole.findElement(By.className("el-checkbox__inner"));
 		getCheckBox.click();
 		WebElement MultiDelete = addRole.getMultiDelete().getEl();
@@ -297,7 +363,7 @@ public class RolePageTest extends BaseChromeTester {
 		WebElement operationFailedAlert = commonCom.getAlertWindow().getEl();
 		Assert.assertTrue(operationFailedAlert.isDisplayed());
 		System.out.println("delete RoleWithUser failed!");
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+
 	}
 
 	private void viewSuperAdmin(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
