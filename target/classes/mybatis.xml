@@ -36,6 +36,6 @@
     
     <mappers>
         <mapper resource="mapper/RoleMapper.xml"/>
-        <mapper resource="mapper/RolePermissionMapper.xml"/>
+        <mapper resource="mapper/UserMapper.xml"/>
     </mappers>
 </configuration>
