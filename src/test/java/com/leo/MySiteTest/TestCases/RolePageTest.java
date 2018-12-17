@@ -122,6 +122,7 @@ public class RolePageTest extends BaseChromeTester {
 
 	@Test
 	public void deleteRoleWithUser() {
+		userService.deleteFromAdminRole("Andy");
 		roleService.deleteByName("Market Manager");
 		roleService.insertByName("Market Manager");
 		userService.deleteByName("Andy");
