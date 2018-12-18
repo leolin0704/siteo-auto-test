@@ -1,5 +1,7 @@
 package com.leo.MySiteTest.TestCases;
 
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -13,6 +15,8 @@ import com.leo.MySiteTest.Models.NavigationComponent;
 import com.leo.MySiteTest.Models.Login.LoginPage;
 import com.leo.MySiteTest.Models.Role.RoleMainPage;
 import com.leo.MySiteTest.TestCases.BaseChromeTester;
+import com.leo.MySiteTest.consts.PasswordConsts;
+import com.leo.MySiteTest.consts.PermissionConsts;
 import com.leo.MySiteTest.service.RoleService;
 import com.leo.MySiteTest.service.UserService;
 
@@ -122,12 +126,10 @@ public class RolePageTest extends BaseChromeTester {
 
 	@Test
 	public void deleteRoleWithUser() {
-		userService.deleteFromAdminRole("Andy");
-		roleService.deleteByName("Market Manager");
-		roleService.insertByName("Market Manager");
-		userService.deleteByName("Andy");
-		userService.insertByName("Andy", finalPassword);
-		userService.roleAddUser("Andy", "Market Manager");
+		ArrayList<String> permissionList = new ArrayList<String>();
+		permissionList.add(PermissionConsts.CUSTOMER);
+
+		userService.InitUser("Andy", "Market Manager", PasswordConsts.PW_123123, permissionList);
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
@@ -168,10 +170,11 @@ public class RolePageTest extends BaseChromeTester {
 
 	@Test
 	public void editRoleFailed() {
-		roleService.deleteByName("DB Manager");
-		roleService.insertByName("DB Manager");
-		roleService.roleAddPermission("DB Manager", "CUSTOMER");
-		roleService.roleAddPermission("DB Manager", "BASIC_INFO");
+		ArrayList<String> permissionList = new ArrayList<String>();
+		permissionList.add(PermissionConsts.CUSTOMER);
+		permissionList.add(PermissionConsts.BASIC_INFO);
+
+		roleService.initRole("DB Manager", permissionList);
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
@@ -186,15 +189,13 @@ public class RolePageTest extends BaseChromeTester {
 
 	@Test
 	public void editRoleSuccessed() {
-		userService.deleteFromAdminRole("Wanglili");
-		userService.deleteByName("Wanglili");
-		roleService.deleteByName("Background Maintain");
+
+		ArrayList<String> permissionList = new ArrayList<String>();
+		permissionList.add(PermissionConsts.CUSTOMER);
+		permissionList.add(PermissionConsts.BASIC_INFO);
+
+		userService.InitUser("Wanglili", "Background Maintain", PasswordConsts.PW_123123, permissionList);
 		roleService.deleteByName("Data Master");
-		roleService.insertByName("Background Maintain");
-		roleService.roleAddPermission("Background Maintain", "CUSTOMER");
-		roleService.roleAddPermission("Background Maintain", "BASIC_INFO");
-		userService.insertByName("Wanglili", finalPassword);
-		userService.roleAddUser("Wanglili", "Background Maintain");
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
