@@ -75,7 +75,10 @@ public class RolePageTest extends BaseChromeTester {
 	@Test
 	public void addRoleSucceed() {
 
-		roleService.deleteByName("Customer Service");
+		ArrayList<String> permissionList = new ArrayList<String>();
+		permissionList.add(PermissionConsts.CUSTOMER);
+
+		userService.InitUser("Andy", "Customer Service", PasswordConsts.PW_123123, permissionList);
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
@@ -94,8 +97,11 @@ public class RolePageTest extends BaseChromeTester {
 	@Test
 	public void queryExistRole() {
 
-		roleService.deleteByName("Boss");
-		roleService.insertByName("Boss");
+		ArrayList<String> permissionList = new ArrayList<String>();
+		permissionList.add(PermissionConsts.SYSTEM);
+		permissionList.add(PermissionConsts.CONTENT);
+
+		userService.InitUser("Lili", "Boss", PasswordConsts.PW_123123, permissionList);
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
@@ -111,8 +117,13 @@ public class RolePageTest extends BaseChromeTester {
 	@Test
 
 	public void addDuplicate() {
-		roleService.deleteByName("Market Analysis");
-		roleService.insertByName("Market Analysis");
+
+		ArrayList<String> permissionList = new ArrayList<String>();
+		permissionList.add(PermissionConsts.BASIC_INFO);
+		permissionList.add(PermissionConsts.CONTENT);
+
+		userService.InitUser("Lili", "Market Analysis", PasswordConsts.PW_123123, permissionList);
+
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
 		RoleMainPage addRole = new RoleMainPage(driver);
@@ -173,8 +184,7 @@ public class RolePageTest extends BaseChromeTester {
 		ArrayList<String> permissionList = new ArrayList<String>();
 		permissionList.add(PermissionConsts.CUSTOMER);
 		permissionList.add(PermissionConsts.BASIC_INFO);
-
-		roleService.initRole("DB Manager", permissionList);
+		userService.InitUser("Andy", "DB Manager", PasswordConsts.PW_123123, permissionList);
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
@@ -195,7 +205,7 @@ public class RolePageTest extends BaseChromeTester {
 		permissionList.add(PermissionConsts.BASIC_INFO);
 
 		userService.InitUser("Wanglili", "Background Maintain", PasswordConsts.PW_123123, permissionList);
-		roleService.deleteByName("Data Master");
+		roleService.deleteRole("Leo", "Data Master");
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
@@ -210,8 +220,11 @@ public class RolePageTest extends BaseChromeTester {
 
 	@Test
 	public void deleteRole() {
-		roleService.deleteByName("Supervisor");
-		roleService.insertByName("Supervisor");
+		ArrayList<String> permissionList = new ArrayList<String>();
+		permissionList.add(PermissionConsts.CUSTOMER);
+		permissionList.add(PermissionConsts.BASIC_INFO);
+		roleService.deleteRole("Leo", "Supervisor");
+		roleService.initRole("Supervisor", permissionList);
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
@@ -351,10 +364,8 @@ public class RolePageTest extends BaseChromeTester {
 	}
 
 	private RoleMainPage addRoleSucceed(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement SaveBtn = addRole.getSaveBtn().getEl();
 		SaveBtn.click();
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getDialog().getBy()));
 		System.out.println("Add Role Successfully!");
 		return addRole;
 	}
