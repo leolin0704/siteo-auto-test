@@ -39,7 +39,7 @@ public class LoginTest extends BaseChromeTester {
 		userService.InitUser("Andy", "DB Manager", PasswordConsts.PW_123123, permissionList);
 
 		LoginPage adminUser = new LoginPage(driver);
-		adminUser.UserLogin("Andy", "123123");
+		adminUser.UserLogin("Andy", "123123", commonCom, waiter);
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement Systemtitle = navigation.getSystemManageNav().getEl();
 		Assert.assertTrue(Systemtitle.isDisplayed());
@@ -65,24 +65,30 @@ public class LoginTest extends BaseChromeTester {
 
 	@Test
 	public void LoginWithNoAcconut() {
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		CommonComponents commonCom = new CommonComponents(driver);
 		LoginPage adminUser = new LoginPage(driver);
-		adminUser.UserLogin("", "123123");
+		adminUser.UserLogin("", "123123", commonCom, waiter);
 		WebElement NoAccountPrompt = adminUser.UserNameWrong().getEl();
 		Assert.assertTrue(NoAccountPrompt.isDisplayed());
 	}
 
 	@Test
 	public void LoginWithNoPassword() {
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		CommonComponents commonCom = new CommonComponents(driver);
 		LoginPage adminUser = new LoginPage(driver);
-		adminUser.UserLogin("admin", "");
+		adminUser.UserLogin("admin", "", commonCom, waiter);
 		WebElement NoPasswordPrompt = adminUser.PasswordWrong().getEl();
 		Assert.assertTrue(NoPasswordPrompt.isDisplayed());
 	}
 
 	@Test
 	public void LoginWithWrongPassword() {
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		CommonComponents commonCom = new CommonComponents(driver);
 		LoginPage adminUser = new LoginPage(driver);
-		adminUser.UserLogin("admin", "456");
+		adminUser.UserLogin("admin", "456", commonCom, waiter);
 		WebElement WrongPasswordPrompt = adminUser.PasswordOrUsernameWrong().getEl();
 		Assert.assertTrue(WrongPasswordPrompt.isDisplayed());
 	}

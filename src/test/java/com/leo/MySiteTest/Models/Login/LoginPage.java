@@ -3,10 +3,13 @@ package com.leo.MySiteTest.Models.Login;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.leo.MySiteTest.Common.ConfigHelper;
 import com.leo.MySiteTest.Models.BaseElement;
 import com.leo.MySiteTest.Models.BaseModel;
+import com.leo.MySiteTest.Models.CommonComponents;
 
 public class LoginPage extends BaseModel {
 
@@ -57,7 +60,7 @@ public class LoginPage extends BaseModel {
 		return byClassName("avatar");
 	}
 
-	public void UserLogin(String Name, String Password) {
+	public void UserLogin(String Name, String Password, CommonComponents commonCom, WebDriverWait waiter) {
 		LoginPage adminUser = new LoginPage(driver);
 		adminUser.loadPage();
 		WebElement inputAccount = adminUser.getUseNameInput().getEl();
@@ -66,6 +69,7 @@ public class LoginPage extends BaseModel {
 		inputPassword.sendKeys(Password);
 		WebElement login = adminUser.getLoginBtn().getEl();
 		login.click();
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 	}
 
 }

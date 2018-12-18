@@ -227,7 +227,7 @@ public class RolePageTest extends BaseChromeTester {
 
 	private void adminLogin(NavigationComponent navigation, CommonComponents commonCom, WebDriverWait waiter) {
 		LoginPage adminUser = new LoginPage(driver);
-		adminUser.UserLogin("admin", "123123");
+		adminUser.UserLogin("admin", "123123", commonCom, waiter);
 
 		waiter.until(ExpectedConditions.presenceOfElementLocated(navigation.getSystemManageNav().getBy()));
 		waiter.until(ExpectedConditions.visibilityOfElementLocated(navigation.getSystemManageNav().getBy()));
@@ -595,8 +595,7 @@ public class RolePageTest extends BaseChromeTester {
 		WebElement RoleName = WangliliRow.findElement(By.cssSelector("[at-key=\"RoleName\"]"));
 		Assert.assertEquals(editRoleName, RoleName.getText());
 		LoginPage adminUser = new LoginPage(driver);
-		adminUser.UserLogin("Wanglili", "123123");
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		adminUser.UserLogin("Wanglili", "123123", commonCom, waiter);
 		WebElement Systemtitle = navigation.getSystemManageNav().getEl();
 		Assert.assertTrue(Systemtitle.isDisplayed());
 		WebElement Customertitle = navigation.getCustomerNav().getEl();
