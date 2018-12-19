@@ -12,7 +12,6 @@ public class RoleMainPage extends BaseModel {
 
 	public BaseElement getAddNav() {
 		return byATKey("btnAdd");
-
 	}
 
 	public BaseElement getMultiDelete() {

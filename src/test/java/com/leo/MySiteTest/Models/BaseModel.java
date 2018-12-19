@@ -39,4 +39,8 @@ public class BaseModel {
 		return new BaseElement(by, driver);
 	}
 
+	public BaseElement getDropDownItem(String atKey, String text) {
+		return byXpath("//li[@at-key='" + atKey + "']/span[contains(text(),'" + text + "')]");
+	}
+
 }
