@@ -1,5 +1,6 @@
 package com.leo.MySiteTest.Models.User;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import com.leo.MySiteTest.Models.BaseElement;
@@ -53,6 +54,10 @@ public class UserMainPage extends BaseModel {
 
 	public BaseElement selectRole(String roleName) {
 		return getDropDownItem("optUserRole", roleName);
+	}
+
+	public BaseElement GetErrorPrompt(String value) {
+		return buildElement(By.xpath("//div[@class='el-form-item__error' and contains(.,'" + value + "')]"));
 	}
 
 }
