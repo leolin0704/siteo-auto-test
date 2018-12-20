@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<!--命名空间和接口保持一致-->
+<mapper namespace="com.leo.MySiteTest.dao.AdminUserRoleDao">
+	<insert id="insertByAccountAndRoleName">
+		insert TAdminUserRole(
+       		AdminUserID,
+       		RoleID,
+       		IsDeleted,
+       		CreateBy
+		) values
+		(
+			 (select ID from TAdminUser where Account = #{account} and isDeleted =0),
+			 (select ID from TRole where name=#{roleName} and isDeleted =0),
+			 0,
+			 'admin'
+		);
+	</insert>
+
+    <delete id="deleteByRoleName" parameterType="string">
+    	delete from TAdminUserRole where RoleID in (select id from TRole where Name = #{roleName})
+    </delete>
+	<delete id="deleteByUserAccount" parameterType="string">
+    	delete from TAdminUserRole where AdminUserID in (select id from TAdminUser where Account like '%'+#{account}+'%')
+    </delete>
+</mapper>

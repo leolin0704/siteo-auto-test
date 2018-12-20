@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<!--命名空间和接口保持一致-->
+<mapper namespace="com.leo.MySiteTest.dao.UserDao">
+ 	<insert id="insertByName" parameterType="String">
+		insert TAdminUser(
+			Account,[Password],[Status],LastUpdateDate,LastUpdateBy,CreateDate,CreateBy
+		) values (
+			#{account},#{password},'A',GETDATE(),'System',GETDATE(),'admin'
+		) 
+   </insert>
+   
+   <delete id="deleteByAccount" parameterType="String">
+
+   delete from TAdminUser where Account like '%'+#{account}+'%';
+
+  </delete>
+
+</mapper>

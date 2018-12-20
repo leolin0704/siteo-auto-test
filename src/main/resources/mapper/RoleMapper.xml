@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<!--命名空间和接口保持一致-->
+<mapper namespace="com.leo.MySiteTest.dao.RoleDao">
+	<sql id="RoleallColumns">
+		ID,Name,IsDeleted,LastUpdateDate,LastUpdateBy,CreateDate,CreateBy
+	</sql>
+	
+	<sql id="PermissionallColumns">
+		ID,Name,IsDeleted,LastUpdateDate,LastUpdateBy,CreateDate,CreateBy
+	</sql>
+	
+	<select id="getList" resultType="com.leo.MySiteTest.dto.RoleDto">
+    	select
+    		<include refid="RoleallColumns" />
+    	from
+    		TRole
+    </select>
+    
+     <delete id="deleteRolePermissionByRoleName" parameterType="string">
+    	delete TRolePermission where RoleID in (select ID from TRole where Name = #{roleName});
+    </delete>
+    
+    
+    <delete id="deleteByName" parameterType="string">
+    	delete TRole where Name = #{roleName};
+    </delete>
+    
+    <insert id="insertByName" parameterType="String">
+      insert TRole(Name,IsDeleted,LastUpdateDate,LastUpdateBy,CreateDate,CreateBy) values (#{roleName},0,GETDATE(),'System',GETDATE(),'admin');   
+    </insert>
+    
+      <insert id="insertRolePermission">
+   INSERT TRolePermission(PermissionID,RoleID,IsDeleted,CreateBy) values
+     ((select TOP 1 ID from TPermission where Name=#{permissionName} and isDeleted =0),
+     (select TOP 1 ID from TRole where name=#{roleName} and isDeleted =0),
+     0,'admin');
+    </insert>
+</mapper>
