@@ -60,4 +60,28 @@ public class UserMainPage extends BaseModel {
 		return buildElement(By.xpath("//div[@class='el-form-item__error' and contains(.,'" + value + "')]"));
 	}
 
+	public BaseElement getQueryInput() {
+		return byATKey("txtBaseQuery");
+	}
+
+	public BaseElement getQueryBtn() {
+		return byATKey("btnBaseQuery");
+	}
+
+	public BaseElement getPromp() {
+		return byClassName("el-message-box");
+	}
+
+	public BaseElement getMulDeleteBtn() {
+		return byATKey("btnMultiDelete");
+	}
+
+	public BaseElement getPrompOkBtn() {
+		return byXpath("//div[@class='el-message-box__btns']/button/span[contains(text(),'OK')]");
+	}
+
+	public BaseElement getNoDataSection() {
+		return byXpath("//div[@class='el-table__empty-block']/span[contains(text(),'No Data')]");
+	}
+
 }
