@@ -96,4 +96,16 @@ public class RoleMainPage extends BaseModel {
 		return byXpath("//div[@class='el-table__empty-block']/span[contains(text(),'No Data')]");
 	}
 
+	public BaseElement getNextPage() {
+		return byClassName("btn-next");
+	}
+
+	public BaseElement getPrePage() {
+		return byClassName("btn-prev");
+	}
+
+	public BaseElement getCurrentPage(int currentNumber) {
+		return byXpath("//ul[@class='el-pager']/li[contains(text(),'" + currentNumber + "')]");
+	}
+
 }

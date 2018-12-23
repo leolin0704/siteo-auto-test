@@ -67,4 +67,14 @@ public class RoleService extends BaseService {
 		this.getSession().commit();
 	}
 
+	public void initManyRoles(String roleName, List<String> permissionNameList) {
+		for (int i = 0; i <= 20; i++) {
+			roleDao.deleteRolePermissionByRoleName(roleName + i);
+			roleDao.deleteByName(roleName + i);
+			this.getSession().commit();
+
+			this.insert(roleName + i, permissionNameList);
+		}
+	}
+
 }

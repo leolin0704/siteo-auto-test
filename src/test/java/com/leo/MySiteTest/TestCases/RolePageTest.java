@@ -238,6 +238,27 @@ public class RolePageTest extends BaseChromeTester {
 		deleteRole(addRole, commonCom, waiter, "Supervisor");
 	}
 
+	@Test
+	public void pageCheck() {
+		ArrayList<String> PermissionList = new ArrayList<String>();
+		PermissionList.add(PermissionConsts.CUSTOMER);
+		PermissionList.add(PermissionConsts.BASIC_INFO);
+
+		roleService.initManyRoles("Manager", PermissionList);
+
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		NavigationComponent navigation = new NavigationComponent(driver);
+		RoleMainPage addRole = new RoleMainPage(driver);
+		CommonComponents commonCom = new CommonComponents(driver);
+
+		adminLogin(navigation, commonCom, waiter);
+		String baseUr2 = ConfigHelper.getBaseURL("/#/role");
+		driver.get(baseUr2 + "/");
+
+		pageCheck(addRole, commonCom, waiter);
+
+	}
+
 	private void adminLogin(NavigationComponent navigation, CommonComponents commonCom, WebDriverWait waiter) {
 		LoginPage adminUser = new LoginPage(driver);
 		adminUser.UserLogin("admin", "123123", commonCom, waiter);
@@ -633,5 +654,21 @@ public class RolePageTest extends BaseChromeTester {
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement NoDataSection = addRole.getNoDataSection().getEl();
 		Assert.assertTrue(NoDataSection.isDisplayed());
+	}
+
+	public void pageCheck(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		WebElement nextPage = addRole.getNextPage().getEl();
+		nextPage.click();
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		WebElement currentPage = addRole.getCurrentPage(2).getEl();
+		Assert.assertTrue(currentPage.isDisplayed());
+		WebElement roleNameTable = driver
+				.findElement(By.xpath("//*[@at-key='Name' and contains(text(),'20')]/ancestor::tr"));
+		Assert.assertTrue(roleNameTable.isDisplayed());
+		currentPage = addRole.getCurrentPage(1).getEl();
+		currentPage.click();
+		roleNameTable = driver.findElement(By.xpath("//*[@at-key='Name' and contains(text(),'1')]/ancestor::tr"));
+		Assert.assertTrue(roleNameTable.isDisplayed());
 	}
 }

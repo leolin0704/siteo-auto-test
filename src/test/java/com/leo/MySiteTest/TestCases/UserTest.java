@@ -173,7 +173,7 @@ public class UserTest extends BaseChromeTester {
 
 		userService.InitUser("Wanglili", "Background Maintain", PasswordConsts.PW_123123, bmPermissionList);
 		userService.InitUser("Andy", "supervisor", PasswordConsts.PW_123123, sPermissionList);
-		userService.InitUser("Leo", "Data Analysor", PasswordConsts.PW_123123, dPermissionList);
+		userService.InitUser("Sunny", "Data Analysor", PasswordConsts.PW_123123, dPermissionList);
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
@@ -187,7 +187,7 @@ public class UserTest extends BaseChromeTester {
 		ArrayList<String> deleteList = new ArrayList<String>();
 		deleteList.add("Wanglili");
 		deleteList.add("Andy");
-		deleteList.add("Leo");
+		deleteList.add("Sunny");
 
 		deleteUser(addUser, commonCom, waiter, deleteList);
 	}
