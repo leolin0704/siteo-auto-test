@@ -49,4 +49,22 @@ public class UserService extends BaseService {
 		this.insert(account, password, roleName);
 	}
 
+	public void initManyUsers(String account, String roleName, String password, List<String> permissionNameList) {
+		adminUserRoleDao.deleteByRoleName(roleName);
+		userDao.deleteWithoutRole();
+		this.getSession().commit();
+		roleService.initRole(roleName, permissionNameList);
+		this.getSession().commit();
+
+		for (int i = 0; i <= 20; i++) {
+
+			String newAccount = account + i;
+
+			adminUserRoleDao.deleteByUserAccount(newAccount);
+			userDao.deleteByAccount(newAccount);
+			this.getSession().commit();
+
+			this.insert(newAccount, password, roleName);
+		}
+	}
 }

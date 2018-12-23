@@ -17,5 +17,11 @@
    delete from TAdminUser where Account like '%'+#{account}+'%';
 
   </delete>
+  
+     <delete id="deleteWithoutRole">
+
+   	delete from TAdminUser where ID not in (select AdminUserID FROM TAdminUserRole);
+
+  </delete>
 
 </mapper>

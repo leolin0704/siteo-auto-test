@@ -192,6 +192,26 @@ public class UserTest extends BaseChromeTester {
 		deleteUser(addUser, commonCom, waiter, deleteList);
 	}
 
+	@Test
+	public void pageCheck() {
+		ArrayList<String> PermissionList = new ArrayList<String>();
+		PermissionList.add(PermissionConsts.CUSTOMER);
+		PermissionList.add(PermissionConsts.BASIC_INFO);
+
+		userService.initManyUsers("NASA", "Manager", "14789632", PermissionList);
+
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		NavigationComponent navigation = new NavigationComponent(driver);
+		UserMainPage addUser = new UserMainPage(driver);
+		CommonComponents commonCom = new CommonComponents(driver);
+
+		adminLogin(navigation, commonCom, waiter);
+		driver.get(baseUr2 + "/");
+
+		pageCheck(addUser, commonCom, waiter);
+
+	}
+
 	private void adminLogin(NavigationComponent navigation, CommonComponents commonCom, WebDriverWait waiter) {
 		LoginPage adminUser = new LoginPage(driver);
 		adminUser.UserLogin("admin", "123123", commonCom, waiter);
@@ -531,5 +551,21 @@ public class UserTest extends BaseChromeTester {
 			QueryInput = addUser.getQueryInput().getEl();
 			QueryInput.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
 		}
+	}
+
+	public void pageCheck(UserMainPage addUser, CommonComponents commonCom, WebDriverWait waiter) {
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		WebElement nextPage = addUser.getNextPage().getEl();
+		nextPage.click();
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		WebElement currentPage = addUser.getCurrentPage(2).getEl();
+		Assert.assertTrue(currentPage.isDisplayed());
+		WebElement roleNameTable = driver
+				.findElement(By.xpath("//*[@at-key='Account' and contains(text(),'0')]/ancestor::tr"));
+		Assert.assertTrue(roleNameTable.isDisplayed());
+		currentPage = addUser.getCurrentPage(1).getEl();
+		currentPage.click();
+		roleNameTable = driver.findElement(By.xpath("//*[@at-key='Account' and contains(text(),'20')]/ancestor::tr"));
+		Assert.assertTrue(roleNameTable.isDisplayed());
 	}
 }
