@@ -28,6 +28,8 @@ public class RolePageTest extends BaseChromeTester {
 
 	final String finalPassword = "4297F44B13955235245B2497399D7A93";
 
+	String baseUr1 = ConfigHelper.getBaseURL("/#/login");
+
 	@Test
 	public void navToRolePage() {
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
@@ -263,6 +265,7 @@ public class RolePageTest extends BaseChromeTester {
 
 	private void adminLogin(NavigationComponent navigation, CommonComponents commonCom, WebDriverWait waiter) {
 		LoginPage adminUser = new LoginPage(driver);
+		driver.get(baseUr1 + "/");
 		adminUser.UserLogin("admin", "123123", commonCom, waiter);
 
 		waiter.until(ExpectedConditions.presenceOfElementLocated(navigation.getSystemManageNav().getBy()));
@@ -624,12 +627,7 @@ public class RolePageTest extends BaseChromeTester {
 		PrompOkBtn.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		LoginPage adminUser = new LoginPage(driver);
-		WebElement inputAccount = adminUser.getUseNameInput().getEl();
-		inputAccount.sendKeys("Wanglili");
-		WebElement inputPassword = adminUser.getPasswordInput().getEl();
-		inputPassword.sendKeys("123123");
-		WebElement login = adminUser.getLoginBtn().getEl();
-		login.click();
+		adminUser.UserLogin("Wanglili", "123123", commonCom, waiter);
 		WebElement Systemtitle = navigation.getSystemManageNav().getEl();
 		Assert.assertTrue(Systemtitle.isDisplayed());
 		WebElement Customertitle = navigation.getCustomerNav().getEl();

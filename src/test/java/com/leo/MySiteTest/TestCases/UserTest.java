@@ -214,6 +214,7 @@ public class UserTest extends BaseChromeTester {
 
 	private void adminLogin(NavigationComponent navigation, CommonComponents commonCom, WebDriverWait waiter) {
 		LoginPage adminUser = new LoginPage(driver);
+		driver.get(baseUr1 + "/");
 		adminUser.UserLogin("admin", "123123", commonCom, waiter);
 
 		waiter.until(ExpectedConditions.presenceOfElementLocated(navigation.getSystemManageNav().getBy()));
@@ -495,13 +496,7 @@ public class UserTest extends BaseChromeTester {
 		PrompOkBtn.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		LoginPage adminUser = new LoginPage(driver);
-		WebElement inputAccount = adminUser.getUseNameInput().getEl();
-		inputAccount.sendKeys("Wanglili");
-		WebElement inputPassword = adminUser.getPasswordInput().getEl();
-		inputPassword.sendKeys("123456");
-		WebElement login = adminUser.getLoginBtn().getEl();
-		login.click();
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		adminUser.UserLogin("Wanglili", "123456", commonCom, waiter);
 		WebElement Systemtitle = navigation.getSystemManageNav().getEl();
 		Assert.assertTrue(Systemtitle.isDisplayed());
 
@@ -530,12 +525,7 @@ public class UserTest extends BaseChromeTester {
 		PrompOkBtn.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		adminUser = new LoginPage(driver);
-		inputAccount = adminUser.getUseNameInput().getEl();
-		inputAccount.sendKeys("Wanglili");
-		inputPassword = adminUser.getPasswordInput().getEl();
-		inputPassword.sendKeys("123456");
-		login = adminUser.getLoginBtn().getEl();
-		login.click();
+		adminUser.UserLogin("Wanglili", "123456", commonCom, waiter);
 		waiter.until(ExpectedConditions.presenceOfElementLocated(commonCom.getAlertWindow().getBy()));
 		waiter.until(ExpectedConditions.visibilityOfElementLocated(commonCom.getAlertWindow().getBy()));
 		WebElement AlertWindow = commonCom.getAlertWindow().getEl();

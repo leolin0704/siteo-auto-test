@@ -18,12 +18,6 @@ public class LoginPage extends BaseModel {
 		// TODO Auto-generated constructor stub
 	}
 
-	String baseUrl = ConfigHelper.getBaseURL("/#/login");
-
-	public void loadPage() {
-		driver.get(baseUrl + "/");
-	}
-
 	public BaseElement getUseNameInput() {
 		return byId("txtAccount");
 	}
@@ -62,7 +56,6 @@ public class LoginPage extends BaseModel {
 
 	public void UserLogin(String Name, String Password, CommonComponents commonCom, WebDriverWait waiter) {
 		LoginPage adminUser = new LoginPage(driver);
-		adminUser.loadPage();
 		WebElement inputAccount = adminUser.getUseNameInput().getEl();
 		inputAccount.sendKeys(Name);
 		WebElement inputPassword = adminUser.getPasswordInput().getEl();
