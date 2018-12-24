@@ -57,7 +57,7 @@ public class RoleService extends BaseService {
 		this.insert(roleName, permissionNameList);
 	}
 
-	public void deleteRole(String account, String roleName) {
+	public void deleteRoleWithUser(String account, String roleName) {
 		adminUserRoleDao.deleteByUserAccount(account);
 		adminUserRoleDao.deleteByRoleName(roleName);
 		userDao.deleteByAccount(account);
@@ -74,6 +74,14 @@ public class RoleService extends BaseService {
 			this.getSession().commit();
 
 			this.insert(roleName + i, permissionNameList);
+		}
+	}
+
+	public void deleteManyRolesWithoutUser(String roleName, List<String> permissionNameList) {
+		for (int i = 0; i <= 20; i++) {
+			roleDao.deleteRolePermissionByRoleName(roleName + i);
+			roleDao.deleteByName(roleName + i);
+			this.getSession().commit();
 		}
 	}
 

@@ -205,7 +205,7 @@ public class RolePageTest extends BaseChromeTester {
 		permissionList.add(PermissionConsts.BASIC_INFO);
 
 		userService.InitUser("Wanglili", "Background Maintain", PasswordConsts.PW_123123, permissionList);
-		roleService.deleteRole("Leo", "Data Master");
+		roleService.deleteRoleWithUser("Leo", "Data Master");
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
@@ -223,7 +223,7 @@ public class RolePageTest extends BaseChromeTester {
 		ArrayList<String> permissionList = new ArrayList<String>();
 		permissionList.add(PermissionConsts.CUSTOMER);
 		permissionList.add(PermissionConsts.BASIC_INFO);
-		roleService.deleteRole("Leo", "Supervisor");
+		roleService.deleteRoleWithUser("Leo", "Supervisor");
 		roleService.initRole("Supervisor", permissionList);
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
@@ -256,6 +256,8 @@ public class RolePageTest extends BaseChromeTester {
 		driver.get(baseUr2 + "/");
 
 		pageCheck(addRole, commonCom, waiter);
+
+		roleService.deleteManyRolesWithoutUser("Manager", PermissionList);
 
 	}
 
@@ -429,21 +431,6 @@ public class RolePageTest extends BaseChromeTester {
 	private void addDuplicateRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
 		addRole(addRole, commonCom, waiter, "Market Analysis");
 		dealWithAlert(addRole, commonCom, waiter);
-	}
-
-	private void queryALLRole(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement ResetBtn = addRole.getResetBtn().getEl();
-		System.out.println("find ResetBtn successfully!");
-		ResetBtn.click();
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-		WebElement QueryBtn = addRole.getQueryBtn().getEl();
-		System.out.println("find QueryBtn successfully!");
-		QueryBtn.click();
-		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-		WebElement superAdminRole = addRole.GetTableRow("Name", "Super Admin").getEl();
-		Assert.assertTrue(superAdminRole.isDisplayed());
-		WebElement dataManagerRole = addRole.GetTableRow("Name", "Customer Service").getEl();
-		Assert.assertTrue(dataManagerRole.isDisplayed());
 	}
 
 	private void deleteRoleWithUser(RoleMainPage addRole, CommonComponents commonCom, WebDriverWait waiter,
@@ -626,8 +613,23 @@ public class RolePageTest extends BaseChromeTester {
 		WebElement WangliliRow = addRole.GetTableRow("Account", "Wanglili").getEl();
 		WebElement RoleName = WangliliRow.findElement(By.cssSelector("[at-key=\"RoleName\"]"));
 		Assert.assertEquals(editRoleName, RoleName.getText());
+		WebElement accountBtn = addRole.getAccountBtn("admin").getEl();
+		System.out.println("Find accountBtn!");
+		accountBtn.click();
+		WebElement logOutBtn = addRole.getLogOutBtn().getEl();
+		System.out.println("Find logOutBtn!");
+		logOutBtn.click();
+		waiter.until(ExpectedConditions.presenceOfElementLocated(addRole.getPromp().getBy()));
+		WebElement PrompOkBtn = addRole.getPrompOkBtn().getEl();
+		PrompOkBtn.click();
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		LoginPage adminUser = new LoginPage(driver);
-		adminUser.UserLogin("Wanglili", "123123", commonCom, waiter);
+		WebElement inputAccount = adminUser.getUseNameInput().getEl();
+		inputAccount.sendKeys("Wanglili");
+		WebElement inputPassword = adminUser.getPasswordInput().getEl();
+		inputPassword.sendKeys("123123");
+		WebElement login = adminUser.getLoginBtn().getEl();
+		login.click();
 		WebElement Systemtitle = navigation.getSystemManageNav().getEl();
 		Assert.assertTrue(Systemtitle.isDisplayed());
 		WebElement Customertitle = navigation.getCustomerNav().getEl();

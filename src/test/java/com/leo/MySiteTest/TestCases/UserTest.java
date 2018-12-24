@@ -237,7 +237,7 @@ public class UserTest extends BaseChromeTester {
 	private void addUser(UserMainPage addUser, CommonComponents commonCom, WebDriverWait waiter, String name,
 			String password) {
 
-		roleService.deleteRole("Justin", "Supervisor");
+		roleService.deleteRoleWithUser("Justin", "Supervisor");
 		ArrayList<String> permissionList = new ArrayList<String>();
 		permissionList.add(PermissionConsts.CUSTOMER);
 		permissionList.add(PermissionConsts.BASIC_INFO);
@@ -484,10 +484,24 @@ public class UserTest extends BaseChromeTester {
 		WebElement RoleName = WangliliRow.findElement(By.cssSelector("[at-key=\"RoleName\"]"));
 		Assert.assertEquals(editRoleName, RoleName.getText());
 
-		driver.get(baseUr1 + "/");
+		WebElement accountBtn = addUser.getAccountBtn("admin").getEl();
+		System.out.println("Find accountBtn!");
+		accountBtn.click();
+		WebElement logOutBtn = addUser.getLogOutBtn().getEl();
+		System.out.println("Find logOutBtn!");
+		logOutBtn.click();
+		waiter.until(ExpectedConditions.presenceOfElementLocated(addUser.getPromp().getBy()));
+		WebElement PrompOkBtn = addUser.getPrompOkBtn().getEl();
+		PrompOkBtn.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		LoginPage adminUser = new LoginPage(driver);
-		adminUser.UserLogin("Wanglili", "123456", commonCom, waiter);
+		WebElement inputAccount = adminUser.getUseNameInput().getEl();
+		inputAccount.sendKeys("Wanglili");
+		WebElement inputPassword = adminUser.getPasswordInput().getEl();
+		inputPassword.sendKeys("123456");
+		WebElement login = adminUser.getLoginBtn().getEl();
+		login.click();
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement Systemtitle = navigation.getSystemManageNav().getEl();
 		Assert.assertTrue(Systemtitle.isDisplayed());
 
@@ -504,16 +518,23 @@ public class UserTest extends BaseChromeTester {
 		statusInactive.click();
 		saveBtn = addUser.getSaveBtn().getEl();
 		saveBtn.click();
-
-		driver.get(baseUr1 + "/");
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		accountBtn = addUser.getAccountBtn("Wanglili").getEl();
+		System.out.println("Find accountBtn!");
+		accountBtn.click();
+		logOutBtn = addUser.getLogOutBtn().getEl();
+		System.out.println("Find logOutBtn!");
+		logOutBtn.click();
+		waiter.until(ExpectedConditions.presenceOfElementLocated(addUser.getPromp().getBy()));
+		PrompOkBtn = addUser.getPrompOkBtn().getEl();
+		PrompOkBtn.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		adminUser = new LoginPage(driver);
-		adminUser.loadPage();
-		WebElement inputAccount = adminUser.getUseNameInput().getEl();
+		inputAccount = adminUser.getUseNameInput().getEl();
 		inputAccount.sendKeys("Wanglili");
-		WebElement inputPassword = adminUser.getPasswordInput().getEl();
+		inputPassword = adminUser.getPasswordInput().getEl();
 		inputPassword.sendKeys("123456");
-		WebElement login = adminUser.getLoginBtn().getEl();
+		login = adminUser.getLoginBtn().getEl();
 		login.click();
 		waiter.until(ExpectedConditions.presenceOfElementLocated(commonCom.getAlertWindow().getBy()));
 		waiter.until(ExpectedConditions.visibilityOfElementLocated(commonCom.getAlertWindow().getBy()));
@@ -567,5 +588,6 @@ public class UserTest extends BaseChromeTester {
 		currentPage.click();
 		roleNameTable = driver.findElement(By.xpath("//*[@at-key='Account' and contains(text(),'20')]/ancestor::tr"));
 		Assert.assertTrue(roleNameTable.isDisplayed());
+		userService.deleteManyUsers("NASA");
 	}
 }

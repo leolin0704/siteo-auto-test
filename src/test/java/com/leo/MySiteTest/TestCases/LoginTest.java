@@ -89,6 +89,7 @@ public class LoginTest extends BaseChromeTester {
 		CommonComponents commonCom = new CommonComponents(driver);
 		LoginPage adminUser = new LoginPage(driver);
 		adminUser.UserLogin("admin", "456", commonCom, waiter);
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement WrongPasswordPrompt = adminUser.PasswordOrUsernameWrong().getEl();
 		Assert.assertTrue(WrongPasswordPrompt.isDisplayed());
 	}
