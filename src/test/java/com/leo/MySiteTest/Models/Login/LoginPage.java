@@ -43,7 +43,8 @@ public class LoginPage extends BaseModel {
 	}
 
 	public BaseElement PasswordOrUsernameWrong() {
-		return buildElement(By.xpath("//p[contains(text(), \"Account and password do not match.\")]"));
+		return buildElement(By.xpath(
+				"//div[@class='el-notification__content']/p[contains(text(), \"Account and password do not match.\")]"));
 	}
 
 	public BaseElement loading() {

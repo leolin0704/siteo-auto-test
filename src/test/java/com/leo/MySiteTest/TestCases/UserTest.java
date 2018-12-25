@@ -15,6 +15,7 @@ import com.leo.MySiteTest.Common.ConfigHelper;
 import com.leo.MySiteTest.Models.CommonComponents;
 import com.leo.MySiteTest.Models.NavigationComponent;
 import com.leo.MySiteTest.Models.Login.LoginPage;
+import com.leo.MySiteTest.Models.MainPage.MainPage;
 import com.leo.MySiteTest.Models.Role.RoleMainPage;
 import com.leo.MySiteTest.Models.User.UserMainPage;
 import com.leo.MySiteTest.consts.PasswordConsts;
@@ -484,11 +485,11 @@ public class UserTest extends BaseChromeTester {
 		WebElement WangliliRow = addUser.GetTableRow("Account", "Wanglili").getEl();
 		WebElement RoleName = WangliliRow.findElement(By.cssSelector("[at-key=\"RoleName\"]"));
 		Assert.assertEquals(editRoleName, RoleName.getText());
-
-		WebElement accountBtn = addUser.getAccountBtn("admin").getEl();
+		MainPage mainPage = new MainPage(driver);
+		WebElement accountBtn = mainPage.getAccountBtn("admin").getEl();
 		System.out.println("Find accountBtn!");
 		accountBtn.click();
-		WebElement logOutBtn = addUser.getLogOutBtn().getEl();
+		WebElement logOutBtn = mainPage.getLogOutBtn().getEl();
 		System.out.println("Find logOutBtn!");
 		logOutBtn.click();
 		waiter.until(ExpectedConditions.presenceOfElementLocated(addUser.getPromp().getBy()));
@@ -514,10 +515,10 @@ public class UserTest extends BaseChromeTester {
 		saveBtn = addUser.getSaveBtn().getEl();
 		saveBtn.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-		accountBtn = addUser.getAccountBtn("Wanglili").getEl();
+		accountBtn = mainPage.getAccountBtn("Wanglili").getEl();
 		System.out.println("Find accountBtn!");
 		accountBtn.click();
-		logOutBtn = addUser.getLogOutBtn().getEl();
+		logOutBtn = mainPage.getLogOutBtn().getEl();
 		System.out.println("Find logOutBtn!");
 		logOutBtn.click();
 		waiter.until(ExpectedConditions.presenceOfElementLocated(addUser.getPromp().getBy()));

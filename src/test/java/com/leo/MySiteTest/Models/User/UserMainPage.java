@@ -95,15 +95,4 @@ public class UserMainPage extends BaseModel {
 	public BaseElement getCurrentPage(int currentNumber) {
 		return byXpath("//ul[@class='el-pager']/li[contains(text(),'" + currentNumber + "')]");
 	}
-
-	public BaseElement getAccountBtn(String account) {
-		return byXpath(
-				"//button[@class='el-button el-button--text el-button--small el-popover__reference']/span[contains(text(),'"
-						+ account + "')]");
-	}
-
-	public BaseElement getLogOutBtn() {
-		return byXpath(
-				"//button[@class='el-button el-button--primary el-button--mini']/span[contains(text(),'Log out')]");
-	}
 }

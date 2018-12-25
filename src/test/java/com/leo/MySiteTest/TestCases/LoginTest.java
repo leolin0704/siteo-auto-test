@@ -1,6 +1,7 @@
 package com.leo.MySiteTest.TestCases;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,6 +13,7 @@ import com.leo.MySiteTest.Common.ConfigHelper;
 import com.leo.MySiteTest.Models.CommonComponents;
 import com.leo.MySiteTest.Models.NavigationComponent;
 import com.leo.MySiteTest.Models.Login.LoginPage;
+import com.leo.MySiteTest.Models.MainPage.MainPage;
 import com.leo.MySiteTest.Models.Role.RoleMainPage;
 import com.leo.MySiteTest.consts.PasswordConsts;
 import com.leo.MySiteTest.consts.PermissionConsts;
@@ -37,7 +39,7 @@ public class LoginTest extends BaseChromeTester {
 		permissionList.add(PermissionConsts.SYSTEM);
 
 		userService.InitUser("Andy", "DB Manager", PasswordConsts.PW_123123, permissionList);
-
+		driver.get(baseUrl + "/");
 		LoginPage adminUser = new LoginPage(driver);
 		adminUser.UserLogin("Andy", "123123", commonCom, waiter);
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
@@ -67,6 +69,7 @@ public class LoginTest extends BaseChromeTester {
 	public void LoginWithNoAcconut() {
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		CommonComponents commonCom = new CommonComponents(driver);
+		driver.get(baseUrl + "/");
 		LoginPage adminUser = new LoginPage(driver);
 		adminUser.UserLogin("", "123123", commonCom, waiter);
 		WebElement NoAccountPrompt = adminUser.UserNameWrong().getEl();
@@ -77,6 +80,7 @@ public class LoginTest extends BaseChromeTester {
 	public void LoginWithNoPassword() {
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		CommonComponents commonCom = new CommonComponents(driver);
+		driver.get(baseUrl + "/");
 		LoginPage adminUser = new LoginPage(driver);
 		adminUser.UserLogin("admin", "", commonCom, waiter);
 		WebElement NoPasswordPrompt = adminUser.PasswordWrong().getEl();
@@ -87,6 +91,7 @@ public class LoginTest extends BaseChromeTester {
 	public void LoginWithWrongPassword() {
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		CommonComponents commonCom = new CommonComponents(driver);
+		driver.get(baseUrl + "/");
 		LoginPage adminUser = new LoginPage(driver);
 		adminUser.UserLogin("admin", "456", commonCom, waiter);
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
@@ -94,4 +99,32 @@ public class LoginTest extends BaseChromeTester {
 		Assert.assertTrue(WrongPasswordPrompt.isDisplayed());
 	}
 
+	@Test
+
+	public void checkMessageBox() {
+		ArrayList<String> PermissionList = new ArrayList<String>();
+		PermissionList.add(PermissionConsts.CUSTOMER);
+		PermissionList.add(PermissionConsts.BASIC_INFO);
+
+		userService.InitUser("NASA", "Manager", "14789632", PermissionList);
+
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		CommonComponents commonCom = new CommonComponents(driver);
+		driver.get(baseUrl + "/");
+		LoginPage adminUser = new LoginPage(driver);
+		adminUser.UserLogin("NASA", "14789632", commonCom, waiter);
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		MainPage mainPage = new MainPage(driver);
+		WebElement messageBoxAccount = mainPage.getMessageBoxAccount("NASA").getEl();
+		System.out.println("Find messageBoxAccount!");
+		Assert.assertTrue(messageBoxAccount.isDisplayed());
+		Calendar nowTime = Calendar.getInstance();
+		WebElement messageBoxTime = mainPage.getMessageBoxTime(nowTime).getEl();
+		System.out.println("Find messageBoxTime!");
+		Assert.assertTrue(messageBoxTime.isDisplayed());
+		WebElement accountBtn = mainPage.getAccountBtn("NASA").getEl();
+		System.out.println("Find accountBtn!");
+		Assert.assertTrue(accountBtn.isDisplayed());
+
+	}
 }
