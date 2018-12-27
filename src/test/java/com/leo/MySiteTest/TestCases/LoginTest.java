@@ -138,8 +138,7 @@ public class LoginTest extends BaseChromeTester {
 			Date realDate = new Date();
 			System.out.println(realDate);
 			long diff = realDate.getTime() - systemDate.getTime();
-			long minutes = diff * 60 * 60;
-			System.out.println(diff);
+			long minutes = diff / 1000 / 60;
 			Assert.assertTrue(minutes <= 2);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
