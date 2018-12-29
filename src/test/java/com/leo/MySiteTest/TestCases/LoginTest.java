@@ -47,12 +47,12 @@ public class LoginTest extends BaseChromeTester {
 		LoginPage adminUser = new LoginPage(driver);
 		adminUser.UserLogin("Andy", "123123", commonCom, waiter);
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-		WebElement Systemtitle = navigation.getSystemManageNav().getEl();
+		WebElement Systemtitle = navigation.getTitleNav("System Manage").getEl();
 		Assert.assertTrue(Systemtitle.isDisplayed());
-		WebElement Customertitle = navigation.getCustomerNav().getEl();
+		WebElement Customertitle = navigation.getTitleNav("Customer").getEl();
 		Assert.assertTrue(Customertitle.isDisplayed());
 		try {
-			WebElement Basic_InfoTitle = navigation.getBasic_InfoNav().getEl();
+			WebElement Basic_InfoTitle = navigation.getTitleNav("Basic Info").getEl();
 
 			System.out.println("Basic_InfoTitle exists");
 		} catch (Exception e) {
@@ -60,7 +60,7 @@ public class LoginTest extends BaseChromeTester {
 
 		}
 		try {
-			WebElement ContentTitle = navigation.getContentNav().getEl();
+			WebElement ContentTitle = navigation.getTitleNav("Content").getEl();
 
 			System.out.println("ContentTitle exists");
 		} catch (Exception e) {

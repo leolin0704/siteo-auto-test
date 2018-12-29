@@ -269,20 +269,20 @@ public class RolePageTest extends BaseChromeTester {
 		driver.get(baseUr1 + "/");
 		adminUser.UserLogin("admin", "123123", commonCom, waiter);
 
-		waiter.until(ExpectedConditions.presenceOfElementLocated(navigation.getSystemManageNav().getBy()));
-		waiter.until(ExpectedConditions.visibilityOfElementLocated(navigation.getSystemManageNav().getBy()));
+		waiter.until(ExpectedConditions.presenceOfElementLocated(navigation.getTitleNav("System Manage").getBy()));
+		waiter.until(ExpectedConditions.visibilityOfElementLocated(navigation.getTitleNav("System Manage").getBy()));
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getMessage().getBy()));
 	}
 
 	private void navToRolePage(NavigationComponent navigation, CommonComponents commonCom, WebDriverWait waiter) {
-		WebElement title = navigation.getSystemManageNav().getEl();
+		WebElement title = navigation.getTitleNav("System Manage").getEl();
 		title.click();
 		System.out.println("System Manage click!");
 
-		waiter.until(ExpectedConditions.presenceOfElementLocated(navigation.getRoleNav().getBy()));
-		waiter.until(ExpectedConditions.visibilityOfElementLocated(navigation.getRoleNav().getBy()));
+		waiter.until(ExpectedConditions.presenceOfElementLocated(navigation.getDetailNav("Role").getBy()));
+		waiter.until(ExpectedConditions.visibilityOfElementLocated(navigation.getDetailNav("Role").getBy()));
 
-		WebElement role = navigation.getRoleNav().getEl();
+		WebElement role = navigation.getDetailNav("Role").getEl();
 		role.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 	}
@@ -630,9 +630,9 @@ public class RolePageTest extends BaseChromeTester {
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		LoginPage adminUser = new LoginPage(driver);
 		adminUser.UserLogin("Wanglili", "123123", commonCom, waiter);
-		WebElement Systemtitle = navigation.getSystemManageNav().getEl();
+		WebElement Systemtitle = navigation.getTitleNav("System Manage").getEl();
 		Assert.assertTrue(Systemtitle.isDisplayed());
-		WebElement Customertitle = navigation.getCustomerNav().getEl();
+		WebElement Customertitle = navigation.getTitleNav("Customer").getEl();
 		Assert.assertTrue(Customertitle.isDisplayed());
 	}
 

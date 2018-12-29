@@ -11,32 +11,12 @@ public class NavigationComponent extends BaseModel {
 		// TODO Auto-generated constructor stub
 	}
 
-	public BaseElement getSystemManageNav() {
-		return buildElement(By.xpath("//ul[@role='menubar']/li/div[contains(string(),'System Manage')]"));
+	public BaseElement getTitleNav(String keywords) {
+		return buildElement(By.xpath("//ul[@role='menubar']/li/div[contains(string(),'" + keywords + "')]"));
 	}
 
-	public BaseElement getContentNav() {
-		return buildElement(By.xpath("//ul[@role='menubar']/li/div[contains(string(),'Content')]"));
-	}
-
-	public BaseElement getBasic_InfoNav() {
-		return buildElement(By.xpath("//ul[@role='menubar']/li/div[contains(string(),'Basic Info')]"));
-	}
-
-	public BaseElement getHomeNav() {
-		return buildElement(By.xpath("//ul[@role='menubar']/li/div[contains(string(),'Home')]"));
-	}
-
-	public BaseElement getCustomerNav() {
-		return buildElement(By.xpath("//ul[@role='menubar']/li/div[contains(string(),'Customer')]"));
-	}
-
-	public BaseElement getRoleNav() {
-		return buildElement(By.xpath("//ul[@role='menu']/li[contains(text(),'Role')]"));
-	}
-
-	public BaseElement getUserNav() {
-		return buildElement(By.xpath("//ul[@role='menu']/li[contains(text(),'User')]"));
+	public BaseElement getDetailNav(String keywords) {
+		return buildElement(By.xpath("//ul[@role='menu']/li[contains(text(),'" + keywords + "')]"));
 	}
 
 }
