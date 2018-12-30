@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<!--命名空间和接口保持一致-->
+<mapper namespace="com.leo.MySiteTest.dao.NoticeDao">
+	<sql id="ServiceallColumns">
+		ID,Title,Content,IsDeleted,LastUpdateDate,LastUpdateBy,CreateDate,CreateBy
+	</sql>
+	
+	<insert id="insertByName" parameterType="string">
+        insert TNotice(Title,IsDeleted,LastUpdateDate,LastUpdateBy,CreateDate,CreateBy) 
+        values(#{title},0,getdate(),'system',getdate(),'admin');
+    </insert>
+    
+    <delete id="deleteManyTitle" parameterType="string">
+        delete from TNotice where Title = #{newTitle}
+    </delete>
+    
+</mapper>
