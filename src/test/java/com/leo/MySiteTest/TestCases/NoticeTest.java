@@ -49,8 +49,8 @@ public class NoticeTest extends BaseChromeTester {
 
 		driver.get(baseUr2 + "/");
 
-		addNotice(addNotice, commonCom, waiter, "界面需要改进");
-		cancelAddNotice(addNotice, commonCom, waiter, "界面需要改进");
+		addNotice(addNotice, commonCom, waiter, "界面不需要改进");
+		cancelAddNotice(addNotice, commonCom, waiter, "界面不需要改进");
 	}
 
 	@Test
@@ -221,6 +221,7 @@ public class NoticeTest extends BaseChromeTester {
 		WebElement contentInputBox = addNotice.getContentInput().getEl();
 		waiter.until(ExpectedConditions.presenceOfElementLocated(addNotice.getNoticeInput().getBy()));
 		System.out.println("Find contentInputBox!");
+		contentInputBox = addNotice.getContentInput().getEl();
 		contentInputBox.sendKeys("网站的界面太丑");
 	}
 
@@ -326,12 +327,17 @@ public class NoticeTest extends BaseChromeTester {
 		WebElement inputBox = addNotice.getInputBox().getEl();
 		System.out.println("Find inputBox!");
 		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+		WebElement contentInputBox = addNotice.getContentInput().getEl();
+		contentInputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
 		WebElement saveBtn = addNotice.getSaveBtn().getEl();
 		saveBtn.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement titleErrorPrompt = commonCom.GetErrorPrompt("Title is required.").getEl();
 		System.out.println("Find titleErrorPrompt!");
 		Assert.assertTrue(titleErrorPrompt.isDisplayed());
+		WebElement contentErrorPrompt = commonCom.GetErrorPrompt("Content is required.").getEl();
+		System.out.println("Find contentErrorPrompt!");
+		Assert.assertTrue(contentErrorPrompt.isDisplayed());
 		inputBox = addNotice.getInputBox().getEl();
 		System.out.println("Find inputBox!");
 		inputBox.sendKeys("1");
@@ -351,6 +357,7 @@ public class NoticeTest extends BaseChromeTester {
 		System.out.println("Find StringLimitPrompt!");
 		Assert.assertTrue(StringLimitPrompt.isDisplayed());
 		WebElement CancelBtn = commonCom.getDialogCancel().getEl();
+
 		CancelBtn.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 	}
@@ -358,8 +365,10 @@ public class NoticeTest extends BaseChromeTester {
 	public void editNoticeSuccessed(NoticeMainPage addNotice, CommonComponents commonCom, WebDriverWait waiter,
 			NavigationComponent navigation, String title, String editTitle) {
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		waiter.until(ExpectedConditions.visibilityOfElementLocated(addNotice.GetTableRow("Title", title).getBy()));
 		WebElement existNotice = addNotice.GetTableRow("Title", title).getEl();
-		WebElement editBtn = existNotice.findElement(By.cssSelector("[at-key=\"edit\"]"));
+		WebElement editBtn = existNotice.findElement(
+				By.xpath("//button[@class='el-button el-button--primary el-button--mini']/i[@class='el-icon-edit']"));
 		editBtn.click();
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement inputBox = addNotice.getInputBox().getEl();
@@ -368,6 +377,8 @@ public class NoticeTest extends BaseChromeTester {
 		inputBox = addNotice.getInputBox().getEl();
 		inputBox.sendKeys(editTitle);
 		WebElement contentInputBox = addNotice.getContentInput().getEl();
+		contentInputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+		contentInputBox = addNotice.getContentInput().getEl();
 		contentInputBox.sendKeys("由于元旦将近，版面调整日期延后");
 		WebElement saveBtn = addNotice.getSaveBtn().getEl();
 		saveBtn.click();

@@ -36,7 +36,8 @@ public class NoticeMainPage extends BaseModel {
 	}
 
 	public BaseElement getQueryBtn() {
-		return byATKey("btnBaseQuery");
+		return byXpath(
+				"//button[@class='el-button el-button--primary el-button--small']/span[contains(text(),'QUERY')]");
 	}
 
 	public BaseElement getInputBox() {
