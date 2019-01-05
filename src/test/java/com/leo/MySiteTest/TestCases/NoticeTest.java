@@ -1,6 +1,10 @@
 package com.leo.MySiteTest.TestCases;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -9,6 +13,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.leo.MySiteTest.Common.ConfigHelper;
+import com.leo.MySiteTest.Common.Utils;
 import com.leo.MySiteTest.Models.CommonComponents;
 import com.leo.MySiteTest.Models.NavigationComponent;
 import com.leo.MySiteTest.Models.Login.LoginPage;
@@ -182,6 +187,33 @@ public class NoticeTest extends BaseChromeTester {
 
 	}
 
+	@Test
+	public void newSymbolCheck() {
+		noticeServce.deleteAllNotice();
+		noticeServce.insertByTitle("系统会在下午6点升级");
+
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		NavigationComponent navigation = new NavigationComponent(driver);
+		MainPage mianPage = new MainPage(driver);
+		CommonComponents commonCom = new CommonComponents(driver);
+
+		adminLogin(navigation, commonCom, waiter);
+
+		newSymbolCheck(mianPage, commonCom, waiter);
+
+		try {
+			noticeServce.insertByTime("日期调整", Utils.CreateDate(2018, 12, 28));
+			System.out.println("添加成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("报错");
+		}
+
+		driver.navigate().refresh();
+
+		newSymbolDispeared(mianPage, commonCom, waiter);
+	}
+
 	private void adminLogin(NavigationComponent navigation, CommonComponents commonCom, WebDriverWait waiter) {
 		LoginPage adminUser = new LoginPage(driver);
 		driver.get(baseUr1 + "/");
@@ -320,10 +352,13 @@ public class NoticeTest extends BaseChromeTester {
 	public void editNoticeFailed(NoticeMainPage addNotice, CommonComponents commonCom, WebDriverWait waiter,
 			String title) {
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+
 		WebElement existNotice = addNotice.GetTableRow("Title", title).getEl();
 		WebElement editBtn = existNotice.findElement(By.cssSelector("[at-key=\"edit\"]"));
 		editBtn.click();
+
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+
 		WebElement inputBox = addNotice.getInputBox().getEl();
 		System.out.println("Find inputBox!");
 		inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
@@ -450,5 +485,24 @@ public class NoticeTest extends BaseChromeTester {
 		currentPage.click();
 		noticeNameTable = driver.findElement(By.xpath("//*[@at-key='Title' and contains(text(),'20')]/ancestor::tr"));
 		Assert.assertTrue(noticeNameTable.isDisplayed());
+	}
+
+	public void newSymbolCheck(MainPage mianPage, CommonComponents commonCom, WebDriverWait waiter) {
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+		WebElement addNoticeLine = driver.findElement(
+				By.xpath("//div[@class='el-card__body']/ul/li/a[contains(text(),'系统会在下午6点升级')]/parent::li/sup"));
+		String newSignal = addNoticeLine.getText();
+		System.out.println(newSignal);
+		Assert.assertEquals("NEW", newSignal);
+	}
+
+	public void newSymbolDispeared(MainPage mianPage, CommonComponents commonCom, WebDriverWait waiter) {
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+
+		WebElement addNoticeLine = driver
+				.findElement(By.xpath("//div[@class='el-card__body']/ul/li/a[contains(text(),'日期调整')]/parent::li/sup"));
+		String newSignal = addNoticeLine.getText();
+		System.out.println(newSignal);
+		Assert.assertEquals("", newSignal);
 	}
 }

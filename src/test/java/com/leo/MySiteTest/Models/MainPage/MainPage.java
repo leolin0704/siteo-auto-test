@@ -39,4 +39,8 @@ public class MainPage extends BaseModel {
 
 	}
 
+	public BaseElement getNewSignal() {
+		return byXpath("//div[@class='el-card__body']/ul/li/sup[contains(text(),'NEW')]");
+
+	}
 }

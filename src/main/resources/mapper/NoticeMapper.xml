@@ -17,4 +17,54 @@
         delete from TNotice where Title = #{newTitle}
     </delete>
     
+    <insert id="insertByTime">
+        insert TNotice(Title,IsDeleted,LastUpdateDate,LastUpdateBy,CreateDate,CreateBy) 
+        values(#{title},0,#{time},'system',#{time},'admin');
+    </insert>
+    
+    <insert id="insert" parameterType="com.leo.MySiteTest.dto.NoticeDto">
+        insert TNotice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+	        <if test="title != null">
+	        	Title,
+	        </if>
+	        <if test="content != null">
+	        	Content,
+	        </if>
+	        <if test="lastUpdateDate != null">
+	        	LastUpdateDate,
+	        </if>
+	        <if test="lastUpdateBy != null">
+	        	LastUpdateBy,
+	        </if>
+	        <if test="createDate != null">
+	        	CreateDate,
+	        </if>
+        	CreateBy,
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+	        <if test="title != null">
+	        	#{title},
+	        </if>
+	        <if test="content != null">
+	        	#{content},
+	        </if>
+	        <if test="lastUpdateDate != null">
+	        	#{lastUpdateDate},
+	        </if>
+	        <if test="lastUpdateBy != null">
+	        	#{lastUpdateBy},
+	        </if>
+	        <if test="createDate != null">
+	        	#{createDate},
+	        </if>
+	        'admin',
+        </trim>
+    </insert>
+    
+     <delete id="deleteAllNotice">
+       delete from TNotice;
+    </delete>
+    
 </mapper>
