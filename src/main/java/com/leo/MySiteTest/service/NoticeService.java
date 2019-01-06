@@ -36,8 +36,9 @@ public class NoticeService extends BaseService {
 		}
 	}
 
-	public void insertByTime(String title, Date time) {
+	public void insert(String title, String content, Date time) {
 		NoticeDto notice = new NoticeDto();
+		notice.setContent(content);
 		notice.setTitle(title);
 		notice.setCreateDate(time);
 		notice.setLastUpdateDate(time);

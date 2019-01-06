@@ -34,7 +34,7 @@ public class MainPage extends BaseModel {
 				"//button[@class='el-button el-button--primary el-button--mini']/span[contains(text(),'Log out')]");
 	}
 
-	public BaseElement getNoticeContent(String title) {
+	public BaseElement getNoticeTitle(String title) {
 		return byXpath("//div[@class='el-card__body']/ul/li/a[contains(text(),'" + title + "')]");
 
 	}
