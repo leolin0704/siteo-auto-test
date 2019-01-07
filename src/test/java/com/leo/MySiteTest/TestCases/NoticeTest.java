@@ -171,7 +171,6 @@ public class NoticeTest extends BaseChromeTester {
 	@Test
 	public void pageCheck() {
 		noticeServce.insertManyTitle("板块调整");
-		;
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
@@ -189,21 +188,36 @@ public class NoticeTest extends BaseChromeTester {
 
 	@Test
 	public void newSymbolCheck() {
+		Calendar cal = Calendar.getInstance();
+		System.out.println(cal.getTime());
+		Date nowadays = cal.getTime();
+		int year = nowadays.getYear() + 1900;
+		System.out.println(year);
+		int month = nowadays.getMonth() + 1;
+		System.out.println(month);
+		int day = nowadays.getDate() - 3;
+		System.out.println(day);
+		int hour = nowadays.getHours();
+		System.out.println(hour);
+		int minute = nowadays.getMinutes();
+		System.out.println(minute);
+		int seconds = nowadays.getSeconds();
+		System.out.println(seconds);
 		noticeServce.deleteAllNotice();
-		noticeServce.insertByTitle("系统会在下午6点升级");
+		noticeServce.insert("系统会在下午6点升级", "", Utils.CreateDate(year, month, day, hour, minute, seconds + 1));
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
-		MainPage mianPage = new MainPage(driver);
+		MainPage mainPage = new MainPage(driver);
 		CommonComponents commonCom = new CommonComponents(driver);
 
 		adminLogin(navigation, commonCom, waiter);
 
-		newSymbolCheck(mianPage, commonCom, waiter);
+		newSymbolCheck(mainPage, commonCom, waiter);
 
 		try {
-			noticeServce.insert("日期调整", "", Utils.CreateDate(2018, 12, 28));
-			System.out.println("添加成功");
+			noticeServce.insert("日期调整", "", Utils.CreateDate(year, month, day, hour, minute, seconds - 1));
+			System.out.println(year + "/" + month + "/" + day + " " + hour + ":" + minute + ":" + (seconds - 1));
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("报错");
@@ -211,21 +225,37 @@ public class NoticeTest extends BaseChromeTester {
 
 		driver.navigate().refresh();
 
-		newSymbolDispeared(mianPage, commonCom, waiter);
+		newSymbolDispeared(mainPage, commonCom, waiter);
 	}
 
 	@Test
 	public void noticeContentCheck() {
-		noticeServce.insert("系统维护", "系统将在今晚11点正常运行", Utils.CreateDate(2019, 1, 6));
+		noticeServce.insert("系统维护", "系统将在今晚11点正常运行", Utils.CreateDate(2019, 1, 7, 0, 0, 0));
 
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		NavigationComponent navigation = new NavigationComponent(driver);
-		MainPage mianPage = new MainPage(driver);
+		MainPage mainPage = new MainPage(driver);
 		CommonComponents commonCom = new CommonComponents(driver);
 
 		adminLogin(navigation, commonCom, waiter);
 
-		noticeContentCheck(mianPage, commonCom, waiter);
+		noticeContentCheck(mainPage, commonCom, waiter);
+	}
+
+	@Test
+	public void systemNoticePageCheck() {
+		noticeServce.deleteAllNotice();
+		noticeServce.insertManyTitle("验证翻页功能");
+		WebDriverWait waiter = new WebDriverWait(driver, 20);
+		NavigationComponent navigation = new NavigationComponent(driver);
+		MainPage mainPage = new MainPage(driver);
+		CommonComponents commonCom = new CommonComponents(driver);
+
+		adminLogin(navigation, commonCom, waiter);
+
+		systemNoticePageCheck(mainPage, commonCom, waiter);
+
+		noticeServce.deleteManyTitle("验证翻页功能");
 	}
 
 	private void adminLogin(NavigationComponent navigation, CommonComponents commonCom, WebDriverWait waiter) {
@@ -326,8 +356,8 @@ public class NoticeTest extends BaseChromeTester {
 
 		driver.get(baseUr3 + "/");
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-		MainPage mianPage = new MainPage(driver);
-		WebElement systemNotice = mianPage.getNoticeTitle("界面需要改进").getEl();
+		MainPage mainPage = new MainPage(driver);
+		WebElement systemNotice = mainPage.getNoticeTitle("界面需要改进").getEl();
 		Assert.assertTrue(systemNotice.isDisplayed());
 	}
 
@@ -437,8 +467,8 @@ public class NoticeTest extends BaseChromeTester {
 
 		driver.get(baseUr3 + "/");
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-		MainPage mianPage = new MainPage(driver);
-		WebElement systemNotice = mianPage.getNoticeTitle(editTitle).getEl();
+		MainPage mainPage = new MainPage(driver);
+		WebElement systemNotice = mainPage.getNoticeTitle(editTitle).getEl();
 		Assert.assertTrue(systemNotice.isDisplayed());
 	}
 
@@ -474,10 +504,10 @@ public class NoticeTest extends BaseChromeTester {
 
 		driver.get(baseUr3 + "/");
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
-		MainPage mianPage = new MainPage(driver);
+		MainPage mainPage = new MainPage(driver);
 		for (int i = 0; i <= 2; i++) {
 			try {
-				WebElement systemNotice = mianPage.getNoticeTitle(deleteList.get(i)).getEl();
+				WebElement systemNotice = mainPage.getNoticeTitle(deleteList.get(i)).getEl();
 				Assert.assertTrue(systemNotice.isDisplayed());
 			} catch (Exception e) {
 				System.out.println(deleteList.get(i) + "doesn't exist!");
@@ -501,7 +531,7 @@ public class NoticeTest extends BaseChromeTester {
 		Assert.assertTrue(noticeNameTable.isDisplayed());
 	}
 
-	public void newSymbolCheck(MainPage mianPage, CommonComponents commonCom, WebDriverWait waiter) {
+	public void newSymbolCheck(MainPage mainPage, CommonComponents commonCom, WebDriverWait waiter) {
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement addNoticeLine = driver.findElement(
 				By.xpath("//div[@class='el-card__body']/ul/li/a[contains(text(),'系统会在下午6点升级')]/parent::li/sup"));
@@ -510,7 +540,7 @@ public class NoticeTest extends BaseChromeTester {
 		Assert.assertEquals("NEW", newSignal);
 	}
 
-	public void newSymbolDispeared(MainPage mianPage, CommonComponents commonCom, WebDriverWait waiter) {
+	public void newSymbolDispeared(MainPage mainPage, CommonComponents commonCom, WebDriverWait waiter) {
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 
 		WebElement addNoticeLine = driver
@@ -520,7 +550,7 @@ public class NoticeTest extends BaseChromeTester {
 		Assert.assertEquals("", newSignal);
 	}
 
-	public void noticeContentCheck(MainPage mianPage, CommonComponents commonCom, WebDriverWait waiter) {
+	public void noticeContentCheck(MainPage mainPage, CommonComponents commonCom, WebDriverWait waiter) {
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 
 		WebElement addNoticeTitle = driver
@@ -530,5 +560,26 @@ public class NoticeTest extends BaseChromeTester {
 		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
 		WebElement dialogContentLine = driver.findElement(By.xpath("//div[@class='el-dialog__body']"));
 		Assert.assertEquals("系统将在今晚11点正常运行", dialogContentLine.getText());
+	}
+
+	public void systemNoticePageCheck(MainPage mainPage, CommonComponents commonCom, WebDriverWait waiter) {
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+
+		WebElement lastNoticeTitle = driver
+				.findElement(By.xpath("//div[@class='el-card__body']/ul/li/a[contains(text(),'20')]/parent::li/a"));
+		Assert.assertTrue(lastNoticeTitle.isDisplayed());
+		WebElement prePage = mainPage.getPrePage().getEl();
+		Assert.assertEquals("true", prePage.getAttribute("disabled"));
+		WebElement lastPage = mainPage.getCurrentPage(5).getEl();
+		Assert.assertTrue(lastPage.isDisplayed());
+		lastPage.click();
+
+		waiter.until(ExpectedConditions.invisibilityOfElementLocated(commonCom.getLoading().getBy()));
+
+		WebElement firstNoticeTitle = driver
+				.findElement(By.xpath("//div[@class='el-card__body']/ul/li/a[contains(text(),'0')]/parent::li/a"));
+		Assert.assertTrue(firstNoticeTitle.isDisplayed());
+		WebElement nextPage = mainPage.getNextPage().getEl();
+		Assert.assertEquals("true", nextPage.getAttribute("disabled"));
 	}
 }

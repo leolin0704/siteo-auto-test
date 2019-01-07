@@ -43,4 +43,19 @@ public class MainPage extends BaseModel {
 		return byXpath("//div[@class='el-card__body']/ul/li/sup[contains(text(),'NEW')]");
 
 	}
+
+	public BaseElement getNextPage() {
+		return byClassName("btn-next");
+
+	}
+
+	public BaseElement getCurrentPage(int page) {
+		return byXpath("//div[@at-key='basePager']/ul/li[contains(text()," + page + ")]");
+
+	}
+
+	public BaseElement getPrePage() {
+		return byClassName("btn-prev");
+
+	}
 }
