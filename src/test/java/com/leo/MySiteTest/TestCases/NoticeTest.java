@@ -188,6 +188,7 @@ public class NoticeTest extends BaseChromeTester {
 
 	@Test
 	public void newSymbolCheck() {
+
 		Calendar cal = Calendar.getInstance();
 		System.out.println(cal.getTime());
 		Date nowadays = cal.getTime();
