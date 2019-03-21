@@ -21,7 +21,7 @@ import com.leo.MySiteTest.Models.MainPage.MainPage;
 import com.leo.MySiteTest.Models.Notice.NoticeMainPage;
 import com.leo.MySiteTest.service.NoticeService;
 
-public class NoticeTest extends BaseChromeTester {
+public class NoticeTest extends BaseTester {
 	String baseUr1 = ConfigHelper.getBaseURL("/#/login");
 	String baseUr2 = ConfigHelper.getBaseURL("/#/notice");
 	String baseUr3 = ConfigHelper.getBaseURL("/#/home");

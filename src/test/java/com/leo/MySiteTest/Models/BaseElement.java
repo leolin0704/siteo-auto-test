@@ -11,9 +11,8 @@ public class BaseElement {
 		this.driver = driver;
 	}
 
-	private By by;
-
 	private WebDriver driver;
+	private By by;
 
 	public By getBy() {
 		return by;

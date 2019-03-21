@@ -36,7 +36,7 @@ public class BaseModel {
 	}
 
 	public BaseElement buildElement(By by) {
-		return new BaseElement(by, driver);
+		return new BaseElement(by, this.driver);
 	}
 
 	public BaseElement getDropDownItem(String atKey, String text) {

@@ -22,7 +22,7 @@ import com.leo.MySiteTest.consts.PermissionConsts;
 import com.leo.MySiteTest.service.RoleService;
 import com.leo.MySiteTest.service.UserService;
 
-public class LoginTest extends BaseChromeTester {
+public class LoginTest extends BaseTester {
 
 	RoleService roleService = new RoleService();
 

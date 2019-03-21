@@ -15,13 +15,13 @@ import com.leo.MySiteTest.Models.NavigationComponent;
 import com.leo.MySiteTest.Models.Login.LoginPage;
 import com.leo.MySiteTest.Models.MainPage.MainPage;
 import com.leo.MySiteTest.Models.Role.RoleMainPage;
-import com.leo.MySiteTest.TestCases.BaseChromeTester;
+import com.leo.MySiteTest.TestCases.BaseTester;
 import com.leo.MySiteTest.consts.PasswordConsts;
 import com.leo.MySiteTest.consts.PermissionConsts;
 import com.leo.MySiteTest.service.RoleService;
 import com.leo.MySiteTest.service.UserService;
 
-public class RolePageTest extends BaseChromeTester {
+public class RolePageTest extends BaseTester {
 
 	RoleService roleService = new RoleService();
 
